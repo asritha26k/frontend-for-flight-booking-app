@@ -1,0 +1,38 @@
+<p>Your searched flights</p>
+
+<p>Flights count: {{ (flights$ | async)?.length }}</p>
+
+<div class="d-flex justify-content-center align-items-center gap-3">
+  <div
+    *ngFor="let flight of (flights$ | async)"
+    class="card"
+    style="width: 18rem;"
+  >
+    <div class="card-body">
+      <h3>{{ flight.airline }}</h3>
+
+      <h5 class="text-muted">
+        {{ flight.origin }} → {{ flight.destination }}
+      </h5>
+
+      <p class="text-success border rounded">
+        {{ flight.price }}
+      </p>
+
+      <h6>
+        Arrival: {{ flight.arrivalTime | date:'dd MMM yyyy, hh:mm a' }}
+      </h6>
+
+      <h6>
+        Departure: {{ flight.departureTime | date:'dd MMM yyyy, hh:mm a' }}
+      </h6>
+
+      <button
+        class="btn btn-primary"
+        (click)="SendFlightId(flight.id)"
+      >
+        Book Ticket
+      </button>
+    </div>
+  </div>
+</div>
