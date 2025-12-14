@@ -1,0 +1,47 @@
+<p>Sign up Page</p>
+<div class="d-flex  justify-content-center align-items-center ">
+<form (ngSubmit)="submit()">
+    <div class="form-group">
+    <label for="exampleInputUsername">Username</label>
+    <input [(ngModel)]="userDetails.username" name="username" class="form-control" id="exampleInputUsername" >
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input [(ngModel)]="userDetails.email" name="email"  type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input [(ngModel)]="userDetails.password" name="password" type="password" class="form-control" id="exampleInputPassword1">
+  </div>
+  <div class="dropdown">
+<button
+  class="btn btn-sm btn-secondary dropdown-toggle"
+  type="button"
+  id="dropdownMenuButton"
+  data-bs-toggle="dropdown"
+  aria-expanded="false">
+  Select your role
+</button>  
+  
+   <ul class="dropdown-menu">
+    <li>
+      <button class="dropdown-item" (click)="selectRole(UserRole.user)">
+        User
+      </button>
+    </li>
+    <li>
+      <button class="dropdown-item" (click)="selectRole(UserRole.admin)">
+        Admin
+      </button>
+    </li>
+    <li>
+      <button class="dropdown-item" (click)="selectRole(UserRole.moderator)">
+        Moderator
+      </button>
+    </li>
+  </ul>
+</div>
+
+  <button type="submit" class="btn btn-primary my-4 ms-5 ">Submit</button>
+</form>
+</div>
