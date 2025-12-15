@@ -1,19 +1,21 @@
 import { Component } from '@angular/core';
 import { userDetails } from '../../models/userDetails';
 import { UserRole } from '../../enums/user-role.enum';
-import { FormsModule } from "@angular/forms";
 import { AuthService } from '../../services/auth-service';
 import { Router } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { usernameValidator } from '../../validatorFunctions/usernameValidator';
+import { passwordValidator } from '../../validatorFunctions/passwordValidator';
 @Component({
   selector: 'app-signup',
-  imports: [FormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './signup.html',
   standalone:true,
   styleUrl: './signup.css',
 })
 export class Signup {
   constructor(private readonly auth:AuthService,private readonly router:Router){}
-  roleSelected:boolean=false;
+  isroleSelected:boolean=false;
   selectedRole:string="";
   UserRole = UserRole; 
   userDetails:userDetails={
@@ -22,8 +24,19 @@ export class Signup {
     password:"",
     roles :[UserRole.ROLE_USER],
   }
+
+form=new FormGroup(
+{
+  email:new FormControl('',[Validators.required,Validators.email]),
+  username:new FormControl('',[Validators.required,usernameValidator]),
+  password: new FormControl('',[Validators.required,passwordValidator])
+
+
+}
+);
+
   selectRole(roleSelected: UserRole): void {
-    this.roleSelected=true;
+    this.isroleSelected=true;
   this.userDetails.roles = [roleSelected];
   if(this.userDetails.roles.includes(UserRole.ROLE_ADMIN)){
     this.selectedRole="Admin";
@@ -32,6 +45,9 @@ export class Signup {
   }
 }
 submit(){
+  this.userDetails.username=this.form.value.username!;
+  this.userDetails.email=this.form.value.email!;
+  this.userDetails.password=this.form.value.password!;
   this.auth.signup(this.userDetails).subscribe({
     
       next:()=> {console.log('Signup successful');
