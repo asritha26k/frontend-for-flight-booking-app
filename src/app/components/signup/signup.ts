@@ -8,9 +8,10 @@ import { usernameValidator } from '../../validatorFunctions/usernameValidator';
 import { passwordValidator } from '../../validatorFunctions/passwordValidator';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-signup',
-  imports: [ReactiveFormsModule,AsyncPipe],
+  imports: [ReactiveFormsModule,AsyncPipe,RouterModule],
   templateUrl: './signup.html',
   standalone:true,
   styleUrl: './signup.css',
