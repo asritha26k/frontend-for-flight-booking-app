@@ -1,18 +1,36 @@
 <div class="d-flex  justify-content-center align-items-center min-vh-100">
-<form class="card p-4 shadow-sm" (ngSubmit)="submit()">
+<form [formGroup]="form" class="card p-4 shadow-sm" (ngSubmit)="submit()">
   <div class="my-2">
     <div class="my-2"><h3 class="text-center">Sign in</h3></div>
 
     <div class="form-group">
     <label class="my-1" for="exampleInputUsername">Username</label>
-    <input placeholder="Enter your username" [(ngModel)]="user.username" name="username" class="form-control" id="exampleInputUsername" >
+    <input     formControlName="username"     placeholder="Enter your username"   class="form-control" id="exampleInputUsername" >
+@if(form.get('username')?.invalid && form.get('username')?.dirty){
+  @if(form.get('username')?.errors?.['minLength']){
+    <small class="text-danger">Minimum 5 characters</small>
+  }
+   @if(form.get('username')?.errors?.['noSpaces']){
+    <small class="text-danger"> Spaces not allowed</small>
+   }
+   @if(form.get('username')?.errors?.['invalidChars']){
+    <small class="text-danger">Only letters, numbers, _ allowed</small>
+   }
+}
   </div>
   <div class="form-group">
     <label class="my-1" for="exampleInputPassword1">Password</label>
-    <input placeholder="Enter your password" [(ngModel)]="user.password" name="password" type="password" class="form-control" id="exampleInputPassword1">
+    <input formControlName="password" placeholder="Enter your password"   type="password" class="form-control" id="exampleInputPassword1">
+    @if(form.get('password')?.invalid && form.get('password')?.dirty){
+     @if(form.get('password')?.errors?.['minLength']){
+       <small class="text-danger">Minimum 6 characters</small>
+     }@if(form.get('password')?.errors?.['noSpaces']){
+       <small class="text-danger"> Spaces not allowed</small>
+     }
+}
   </div>
 </div>
-  <button type="submit" class="btn btn-primary my-4">Submit</button>
+  <button  [disabled]="form.invalid" type="submit" class="btn btn-primary my-4">Submit</button>
 
 </form>
 </div>
