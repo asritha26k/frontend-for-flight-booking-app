@@ -19,6 +19,7 @@ export class Signup {
   error$!: Observable<string | null>;
   constructor(private readonly auth:AuthService,private readonly router:Router){}
   ngOnInit(): void {
+    this.auth.clearError();
     this.error$ = this.auth.error$;
   }
   isroleSelected:boolean=false;
