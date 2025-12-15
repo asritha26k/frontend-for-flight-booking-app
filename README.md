@@ -2,7 +2,7 @@
 
 A full-stack flight booking system built with Angular frontend and Spring Boot microservices backend. This application allows users to search for flights, book tickets, and manage their reservations through a modern web interface.
 
-## 🚀 Project Overview
+## Project Overview
 
 This is a microservices-based flight booking platform that demonstrates enterprise-level architecture with:
 - **Frontend**: Angular 20.3 with Bootstrap for responsive UI
@@ -14,7 +14,7 @@ This is a microservices-based flight booking platform that demonstrates enterpri
 - **Databases**: MySQL (authentication) and PostgreSQL (business data)
 - **Containerization**: Docker & Docker Compose
 
-## 🏗️ Architecture
+## Architecture
 
 ### Microservices
 
@@ -54,7 +54,7 @@ This is a microservices-based flight booking platform that demonstrates enterpri
 
 The frontend is a modern Angular single-page application (SPA) with the following structure:
 
-#### 🎨 Components
+#### Components
 
 1. **Home Component** (`/`)
    - Landing page with application overview
@@ -79,19 +79,19 @@ The frontend is a modern Angular single-page application (SPA) with the followin
    - Real-time flight availability
    - Interactive flight cards with booking options
 
-5. **Passenger Registration Component** (`/register`) 🔒
+5. **Passenger Registration Component** (`/register`) - Protected
    - Register passenger details before booking
    - Form validation for passenger information
-   - Protected route (requires authentication)
+   - Requires authentication
    - Integration with Passenger Service API
 
-6. **Ticket Booking Component** (`/book`) 🔒
+6. **Ticket Booking Component** (`/book`) - Protected
    - Complete booking process
    - Seat selection and ticket confirmation
-   - Protected route (requires authentication)
+   - Requires authentication
    - Real-time booking updates
 
-#### 🛣️ Routing & Navigation
+#### Routing & Navigation
 
 **Route Configuration:**
 ```typescript
@@ -108,7 +108,7 @@ The frontend is a modern Angular single-page application (SPA) with the followin
 - `adminGuard` - Restricts access to admin-only routes
 - `userOrAdminGuard` - Allows access to authenticated users and admins
 
-#### 🔐 Security & Interceptors
+#### Security & Interceptors
 
 **Auth Interceptor** (`auth-interceptor.ts`)
 - Automatically attaches JWT tokens to HTTP requests
@@ -116,7 +116,7 @@ The frontend is a modern Angular single-page application (SPA) with the followin
 - Handles token refresh and expiration
 - Intercepts 401/403 responses for automatic logout
 
-#### 🎯 Services
+#### Services
 
 The application uses Angular services to interact with backend microservices:
 
@@ -143,7 +143,7 @@ The application uses Angular services to interact with backend microservices:
    - Ticket history and retrieval
    - Payment processing
 
-#### 📋 Data Models
+#### Data Models
 
 **TypeScript Interfaces:**
 - `Flight` - Flight details and availability
@@ -154,7 +154,7 @@ The application uses Angular services to interact with backend microservices:
 - `UserResponse` - API response structure
 - `SearchRequest` - Flight search parameters
 
-#### ✅ Form Validation
+#### Form Validation
 
 **Custom Validators:**
 - `passwordValidator` - Enforces strong password requirements
@@ -171,18 +171,18 @@ The application uses Angular services to interact with backend microservices:
 - Pattern matching
 - Min/Max length validation
 
-#### 🎨 UI/UX Features
+#### UI/UX Features
 
-- **Responsive Design**: Bootstrap 5.3.8 for mobile-first design
-- **Form Validation**: Real-time validation with error messages
-- **Loading States**: Spinners and progress indicators
-- **Error Handling**: User-friendly error messages
-- **Toast Notifications**: Success/error feedback
-- **Protected Routes**: Automatic redirect to login for unauthorized access
-- **Clean UI**: Modern, intuitive interface
-- **Accessibility**: ARIA labels and keyboard navigation support
+- Bootstrap 5.3.8 for mobile-first responsive design
+- Real-time form validation with error messages
+- Loading spinners and progress indicators
+- User-friendly error handling
+- Toast notifications for success/error feedback
+- Automatic redirect to login for protected routes
+- Modern, intuitive interface
+- ARIA labels and keyboard navigation support
 
-## 📋 Prerequisites
+## Prerequisites
 
 ### Frontend Requirements
 - **Node.js** v18 or higher
@@ -195,7 +195,7 @@ The application uses Angular services to interact with backend microservices:
 - **Maven** 3.8+
 - **Docker** & **Docker Compose**
 
-## 🛠️ Setup and Installation
+## Setup and Installation
 
 ### Backend Setup
 
@@ -241,7 +241,7 @@ ng serve
 http://localhost:4200/
 ```
 
-## 🎯 Frontend Development
+## Frontend Development
 
 ### Development Server
 
@@ -399,7 +399,7 @@ Authorization: Bearer <jwt-token>
 - Global styles: `src/styles.css`
 - Follow BEM naming convention for custom classes
 
-## 🏗️ Building
+## Building
 
 ### Production Build
 
@@ -415,7 +415,7 @@ Build artifacts will be stored in the `dist/` directory.
 npm run serve:ssr:frontendForSigningIn
 ```
 
-## 🧪 Testing
+## Testing
 
 ### Unit Tests
 
@@ -433,7 +433,7 @@ For e2e testing, run:
 ng e2e
 ```
 
-## 🗄️ Database Information
+## Database Information
 
 ### MySQL (Auth Service)
 - **Port**: 3307 (host) → 3306 (container)
@@ -460,14 +460,14 @@ ng e2e
    - User: postgres
    - Password: password
 
-## 📨 Message Queue
+## Message Queue
 
 ### Apache Kafka
 - **Kafka Broker**: localhost:9092 (external), kafka:29092 (internal)
 - **Zookeeper**: localhost:2181
 - **Topics**: Used for ticket booking events and email notifications
 
-## 🔧 Configuration
+## Configuration
 
 ### Backend Configuration
 Each microservice can be configured through:
@@ -506,7 +506,7 @@ export const environment = {
 }
 ```
 
-## 📦 Docker Services
+## Docker Services
 
 All backend services are containerized. To manage Docker services:
 
@@ -530,7 +530,7 @@ docker-compose logs -f [service-name]
 docker-compose up -d --build
 ```
 
-## 🌐 API Endpoints
+## API Endpoints
 
 All API requests should be routed through the API Gateway at `http://localhost:8765`
 
@@ -540,71 +540,71 @@ Example endpoints:
 - **Flights**: `/flight/**`
 - **Tickets**: `/ticket/**`
 
-## 🛡️ Security
+## Security
 
 - JWT-based authentication
 - Secure password storage with encryption
 - Role-based access control
 - Protected routes with authentication guards
 
-## 📱 Features
+## Features
 
 ### Frontend Features
 
 **User Experience:**
-- ✅ **Responsive Design** - Mobile-first approach with Bootstrap 5.3.8
-- ✅ **Single Page Application** - Fast, seamless navigation without page reloads
-- ✅ **Progressive Enhancement** - Works on all modern browsers
-- ✅ **Server-Side Rendering (SSR)** - Improved SEO and initial load performance
-- ✅ **Lazy Loading** - Optimized bundle sizes and faster load times
+- Responsive design - Mobile-first approach with Bootstrap 5.3.8
+- Single page application - Fast, seamless navigation
+- Progressive enhancement - Works on all modern browsers
+- Server-side rendering - Improved SEO and initial load performance
+- Lazy loading - Optimized bundle sizes
 
 **Authentication & Authorization:**
-- ✅ **JWT Token Authentication** - Secure, stateless authentication
-- ✅ **Protected Routes** - Guard-based route protection
-- ✅ **Role-Based Access** - User and Admin role management
-- ✅ **Auto-Redirect** - Automatic login redirect for protected pages
-- ✅ **Session Management** - Persistent login with local storage
-- ✅ **Token Refresh** - Automatic token refresh handling
+- JWT token authentication - Secure, stateless authentication
+- Protected routes - Guard-based route protection
+- Role-based access - User and Admin role management
+- Auto-redirect - Automatic login redirect for protected pages
+- Session management - Persistent login with local storage
+- Token refresh - Automatic token refresh handling
 
 **Forms & Validation:**
-- ✅ **Real-Time Validation** - Instant feedback on form inputs
-- ✅ **Custom Validators** - Username and password strength validation
-- ✅ **Error Messages** - User-friendly validation error display
-- ✅ **Form State Management** - Disabled submit until valid
-- ✅ **Field-Level Validation** - Individual field validation indicators
+- Real-time validation - Instant feedback on form inputs
+- Custom validators - Username and password strength validation
+- User-friendly error messages
+- Form state management - Disabled submit until valid
+- Field-level validation indicators
 
 **Flight Booking Flow:**
-- ✅ **Flight Search** - Search by source, destination, and date
-- ✅ **Flight Listing** - View available flights with details
-- ✅ **Passenger Registration** - Add passenger information
-- ✅ **Ticket Booking** - Complete booking process
-- ✅ **Booking Confirmation** - Immediate booking feedback
-- ✅ **Email Notifications** - Automated confirmation emails
+- Flight search by source, destination, and date
+- View available flights with details
+- Passenger registration
+- Complete booking process
+- Immediate booking confirmation
+- Automated email notifications
 
 **UI Components:**
-- ✅ **Navigation Bar** - Responsive navbar with role-based menus
-- ✅ **Form Controls** - Styled input fields, buttons, dropdowns
-- ✅ **Cards** - Flight information cards
-- ✅ **Modals** - Confirmation and alert dialogs
-- ✅ **Loading Indicators** - Spinners for async operations
-- ✅ **Toast Notifications** - Success/error messages
+- Responsive navigation bar with role-based menus
+- Styled form controls - Input fields, buttons, dropdowns
+- Flight information cards
+- Confirmation and alert modals
+- Loading spinners for async operations
+- Toast notifications for success/error messages
 
 **Performance:**
-- ✅ **Optimized Builds** - Production builds with minification
-- ✅ **Code Splitting** - Reduced initial bundle size
-- ✅ **Caching Strategy** - HTTP response caching
-- ✅ **Async Operations** - Non-blocking UI with RxJS observables
+- Production builds with minification
+- Code splitting for reduced bundle size
+- HTTP response caching
+- Non-blocking UI with RxJS observables
 
 ### Backend Features
 
-- ✅ **Microservices Architecture** - Scalable, independent services
-- ✅ **Service Discovery** - Eureka-based service registration
-- ✅ **API Gateway** - Single entry point for all requests
-- ✅ **Event-Driven** - Kafka for asynchronous communication
-- ✅ **Database Per Service** - MySQL + PostgreSQL
-- ✅ **Containerization** - Docker & Docker Compose deployment
+- Microservices architecture - Scalable, independent services
+- Service discovery - Eureka-based service registration
+- API Gateway - Single entry point for all requests
+- Event-driven - Kafka for asynchronous communication
+- Database per service - MySQL + PostgreSQL
+- Containerization - Docker & Docker Compose deployment
 
-## 🔍 Service Health Checks
+## Service Health Checks
 
 The system includes health checks for critical services:
 - Eureka Server: `http://localhost:8761/eureka/apps`
@@ -612,7 +612,7 @@ The system includes health checks for critical services:
 - Kafka: Connection verification
 - All services register with Eureka for discovery
 
-## 📝 Development Guidelines
+## Development Guidelines
 
 ### Code Style
 - Prettier configured for consistent formatting
@@ -620,31 +620,7 @@ The system includes health checks for critical services:
 - Single quotes preferred
 - Angular parser for HTML templates
 
-### Project Structure
-```
-frontend-flight-booking-app/
-├── src/
-│   ├── app/
-│   │   ├── components/       # UI components
-│   │   ├── services/         # API services
-│   │   ├── guards/           # Route guards
-│   │   ├── interceptors/     # HTTP interceptors
-│   │   ├── models/           # Data models
-│   │   ├── enums/            # Enumerations
-│   │   └── validatorFunctions/ # Custom validators
-│   └── ...
-└── backend-flight-booking-app/
-    ├── api-gateway/
-    ├── auth-service/
-    ├── ConfigServer/
-    ├── email-service/
-    ├── flight-service/
-    ├── passenger-service/
-    ├── service-registry/
-    └── ticket-service/
-```
-
-## 🚨 Troubleshooting
+## Troubleshooting
 
 ### Backend Issues
 1. Ensure all Docker containers are running: `docker ps`
@@ -704,7 +680,7 @@ ng serve --port 4300
 - Review Network tab for failed requests
 - Use Angular DevTools for component inspection
 
-## 📚 Technologies Used
+## Technologies Used
 
 ### Frontend Stack
 
@@ -763,15 +739,15 @@ ng serve --port 4300
 - Docker & Docker Compose
 - Maven
 
-## 👨‍💻 Author
+## Author
 
 Chubb Week 9 Assignment - Flight Booking Application
 
-## 📄 License
+## License
 
 This project is part of a training assignment.
 
-## 🔗 Additional Resources
+## Additional Resources
 
 - [Angular Documentation](https://angular.dev)
 - [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli)
