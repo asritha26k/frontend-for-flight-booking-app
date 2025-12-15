@@ -46,16 +46,20 @@ export class FlightList implements OnInit {
     );
   }
 
-  SendFlightId(flightId: string) {
+  SendFlightId(flight: Flight) {
+      console.log('CLICK HANDLER FIRED');
+    console.log('Clicked flight object:', flight);
+    let flightId = flight.flightId;
+    console.log(flightId);
     this.authService.currentUser
       .pipe(
         take(1),
         switchMap(user => {
-          if (!user?.id) {
-            this.router.navigate(['/']);
+          if (!user?.email) {
+            this.router.navigate(['/signin']);
             throw new Error('No user');
           }
-          return this.passengerService.getPassengerByAuthUserId(user.id);
+          return this.passengerService.getPassengerByEmail(user.email);
         })
       )
       .subscribe({

@@ -3,6 +3,7 @@ import { userDetails } from '../../models/userDetails';
 import { UserRole } from '../../enums/user-role.enum';
 import { FormsModule } from "@angular/forms";
 import { AuthService } from '../../services/auth-service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-signup',
   imports: [FormsModule],
@@ -11,21 +12,32 @@ import { AuthService } from '../../services/auth-service';
   styleUrl: './signup.css',
 })
 export class Signup {
-  constructor(private readonly auth:AuthService){}
+  constructor(private readonly auth:AuthService,private readonly router:Router){}
+  roleSelected:boolean=false;
+  selectedRole:string="";
   UserRole = UserRole; 
   userDetails:userDetails={
     username:"",
     email:"",
     password:"",
-    role :[UserRole.user],
+    roles :[UserRole.ROLE_USER],
   }
   selectRole(roleSelected: UserRole): void {
-  this.userDetails.role = [roleSelected];
+    this.roleSelected=true;
+  this.userDetails.roles = [roleSelected];
+  if(this.userDetails.roles.includes(UserRole.ROLE_ADMIN)){
+    this.selectedRole="Admin";
+  }else{
+    this.selectedRole="User";
+  }
 }
 submit(){
   this.auth.signup(this.userDetails).subscribe({
     
-      next:()=> {console.log('Signup successful')}
+      next:()=> {console.log('Signup successful');
+        this.router.navigate(['/signin']);
+
+      }
 
     ,
     

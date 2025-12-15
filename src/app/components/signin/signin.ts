@@ -23,9 +23,13 @@ export class Signin {
   this.auth.signin(this.user).subscribe({
 next:()=>{console.log('Signin succesful');
   this.signed=true;
-  this.router.navigate(['/signedin']);
+  this.router.navigate(['/']);
 },
-error:(err)=>{console.error('Sign in failed:',err.message);}
+error:(err)=>{
+  console.error('Sign in failed:',err.message);
+  this.router.navigate(['/signup'])
+
+}
   }
   );
 }
