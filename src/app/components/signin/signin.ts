@@ -5,10 +5,12 @@ import { FormControl, FormGroup,  ReactiveFormsModule, Validators } from '@angul
 import { Router } from '@angular/router';
 import { usernameValidator } from '../../validatorFunctions/usernameValidator';
 import { passwordValidator } from '../../validatorFunctions/passwordValidator';
+import { Observable } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-signin',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,AsyncPipe],
   standalone:true,
   templateUrl: './signin.html',
   styleUrls: ['./signin.css'],
@@ -20,8 +22,11 @@ export class Signin {
     username:"",
     password:""
   }
+    error$!: Observable<string | null>;
+  
   ngOnInit() {
   this.auth.clearError();
+  this.error$ = this.auth.error$;
 }
 
 form = new FormGroup({
@@ -44,7 +49,7 @@ next:()=>{console.log('Signin succesful');
 },
 error:(err)=>{
   console.error('Sign in failed:',err.message);
-  this.router.navigate(['/signup'])
+ // this.router.navigate(['/signup'])
 
 }
   }
