@@ -1,28 +1,40 @@
 import { Component } from '@angular/core';
 import { user } from '../../models/user';
 import { AuthService } from '../../services/auth-service';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup,  ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { usernameValidator } from '../../validatorFunctions/usernameValidator';
+import { passwordValidator } from '../../validatorFunctions/passwordValidator';
 
 @Component({
   selector: 'app-signin',
-  imports: [FormsModule],
+  imports: [ReactiveFormsModule],
   standalone:true,
   templateUrl: './signin.html',
   styleUrls: ['./signin.css'],
 })
 export class Signin {
-  signed:boolean=false;
  constructor(private readonly auth:AuthService,private readonly router:Router){}
   user:user={
     username:"",
     password:""
   }
-  submit(){
+form = new FormGroup({
+  username: new FormControl('', [
+    Validators.required,
+    usernameValidator
+  ]),
+  password:new FormControl('',[
+    Validators.required,passwordValidator
+  ]
 
+  )
+});  
+  submit(){
+    this.user.username=this.form.value.username!;
+    this.user.password=this.form.value.password!;
   this.auth.signin(this.user).subscribe({
 next:()=>{console.log('Signin succesful');
-  this.signed=true;
   this.router.navigate(['/']);
 },
 error:(err)=>{
