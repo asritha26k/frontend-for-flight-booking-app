@@ -57,8 +57,10 @@ submit() {
   this.auth.signup(this.userDetails).subscribe({
     next: () => {
       console.log('Signup successful');
+       this.auth.clearError();
       this.router.navigate(['/signin']);
     }
   });
 }
+
 }

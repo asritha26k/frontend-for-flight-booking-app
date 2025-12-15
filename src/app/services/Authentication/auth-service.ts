@@ -88,4 +88,7 @@ export class AuthService {
     console.error('Auth error:',message);
     return throwError(() => message);
   }
+  clearError() {
+  this.errorSubject.next(null);
+}
 }

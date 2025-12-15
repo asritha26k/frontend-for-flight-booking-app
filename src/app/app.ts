@@ -27,7 +27,10 @@ export class App {
   logout() {
   this.authService.signout().subscribe({
     next: () => {
-      this.router.navigate(['/']);
+      console.log("singed out");
+      this.router.navigate(['/']).then(() => {
+        window.location.reload();
+      });
     },
     error: err => console.error(err)
   });

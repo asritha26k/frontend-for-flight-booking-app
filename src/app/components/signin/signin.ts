@@ -13,12 +13,17 @@ import { passwordValidator } from '../../validatorFunctions/passwordValidator';
   templateUrl: './signin.html',
   styleUrls: ['./signin.css'],
 })
+
 export class Signin {
  constructor(private readonly auth:AuthService,private readonly router:Router){}
   user:user={
     username:"",
     password:""
   }
+  ngOnInit() {
+  this.auth.clearError();
+}
+
 form = new FormGroup({
   username: new FormControl('', [
     Validators.required,
