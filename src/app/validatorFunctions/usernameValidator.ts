@@ -8,10 +8,7 @@ export function usernameValidator(
 
   if (!value) return null;
 
-  if (value.length < 5) {
-    return { minLength: true };
-  }
-
+  
   if (!/^[a-zA-Z]/.test(value)) {
     return { mustStartWithLetter: true };
   }
@@ -20,9 +17,13 @@ export function usernameValidator(
     return { noSpaces: true };
   }
 
-  if (!/^[a-zA-Z0-9_]+$/.test(value)) {
-    return { invalidChars: true };
+  if (!/^[A-Za-z][\w]*$/.test(value)) {
+  return { invalidChars: true };
+}
+if (value.length < 5) {
+    return { minLength: true };
   }
+
 
   return null; //this is valid
 }
