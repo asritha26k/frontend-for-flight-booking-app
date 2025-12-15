@@ -1,20 +1,44 @@
   <div ><h4 class="text-center my-2">Search for flights</h4></div>
 
-<div class="d-flex justify-content-center align-items-center  my-3 w-100">
+<div   class="d-flex justify-content-center align-items-center  my-3 w-100" >
 
-<form class="card p-4 shadow-sm w-80 rounded-pill ">
-  <div class="d-flex gap-3 flex-row align-items-center justify-content-between">
-  <div class="form-group d-flex flex-row justify-content-between">
-    
-      
+<form [formGroup]="form"   class="card p-4 shadow-sm w-80 rounded-pill " (ngSubmit)="onSubmit()">
+  <div  class="d-flex gap-3 flex-row align-items-center justify-content-between">
+  <div  class="form-group d-flex flex-row justify-content-between">
     <label class="mx-3" for="originId">Origin</label>
-    <input placeholder="Enter origin" [(ngModel)]="req.origin" name="origin" id="originId" class="form-control form-control-sm py-1 rounded-pill"  >
+    <div class="d-flex flex-column">
+    <input formControlName="origin"  placeholder="Enter origin"  id="originId" class="form-control form-control-sm py-1 rounded-pill"  >
+    <div class="error-slot">
+        @if(form.get('origin')?.invalid && form.get('origin')?.dirty){
+       @if(form.get('origin')?.errors?.['pattern']){
+    <small class="text-danger"  style="font-size: 12px;">Only alphabets are allowed</small>   
+  }
+  }
   </div>
-  <div class="form-group d-flex flex-row justify-content-between">
-    <label class="mx-3" for="destinationId">Destination</label>
-    <input  placeholder="Enter destination" [(ngModel)]="req.destination" name="destination" id="destinationId"  class="form-control form-control-sm py-1 rounded-pill" >
   </div>
-  <button (click)="onSubmit()" type="submit" class="btn btn-primary rounded-pill d-flex align-items-center gap-2 px-4 ">
+  </div>
+  <div   style="min-height: 16px" class="form-group d-flex flex-row justify-content-between">
+  <label class="mx-3" for="destinationId">Destination</label>
+
+  <div class="d-flex flex-column">
+    <input
+      formControlName="destination"
+      placeholder="Enter destination"
+      id="destinationId"
+      class="form-control form-control-sm py-1 rounded-pill"
+    />
+ <div class="error-slot">
+    @if (form.get('destination')?.invalid && form.get('destination')?.dirty) {
+      @if (form.get('destination')?.errors?.['pattern']) {
+        <small class="text-danger"   style="font-size: 12px;">Only alphabets are allowed</small>
+      }
+    }
+    </div>
+  </div>
+</div>
+
+  
+  <button [disabled]="form.invalid"  type="submit" class="btn btn-primary rounded-pill d-flex align-items-center gap-2 px-4 ">
     <span class="material-symbols-outlined">search</span>
     
     Search</button>
