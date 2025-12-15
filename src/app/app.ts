@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { RouterModule } from '@angular/router';
-import { AuthService } from './services/auth-service';
+import { AuthService } from './services/Authentication/auth-service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 

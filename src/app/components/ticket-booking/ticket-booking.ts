@@ -9,9 +9,9 @@ import {
   startWith
 } from 'rxjs';
 
-import { TicketService } from '../../services/ticket-service';
+import { TicketService } from '../../services/TicketService/ticket-service';
 import { Ticket } from '../../models/Ticket';
-import { AuthService } from '../../services/auth-service';
+import { AuthService } from '../../services/Authentication/auth-service';
 
 @Component({
   selector: 'app-ticket-booking',

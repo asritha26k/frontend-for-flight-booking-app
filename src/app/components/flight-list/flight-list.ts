@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { FlightService } from '../../services/flight-service';
+import { FlightService } from '../../services/FlightService/flight-service';
 import { Flight } from '../../models/Flight';
 import { searchReq } from '../../models/searchReq';
-import { AuthService } from '../../services/auth-service';
-import { PassengerService } from '../../services/passenger-service';
+import { AuthService } from '../../services/Authentication/auth-service';
+import { PassengerService } from '../../services/PassengerService/passenger-service';
 import { take, switchMap } from 'rxjs/operators';
 
 
@@ -18,40 +18,20 @@ import { take, switchMap } from 'rxjs/operators';
   templateUrl: './flight-list.html',
   styleUrl: './flight-list.css',
 })
-export class FlightList implements OnInit {
+export class FlightList {
 
-  flights$!: Observable<Flight[]>;
-
-  searchData!: searchReq;
+  @Input() flights: Flight[] | null = [];
 
   constructor(
-    private readonly flightService: FlightService,
     private readonly router: Router,
     private readonly authService: AuthService,
     private readonly passengerService: PassengerService
   ) {}
 
-  ngOnInit(): void {
-    const state = history.state;
-
-    if (!state?.searchData) {
-      this.router.navigate(['/']);
-      return;
-    }
-
-    this.searchData = state.searchData;
-
-    
-    this.flights$ = this.flightService.getFlightByOriginAndDestination(
-      this.searchData
-    );
-  }
-
   SendFlightId(flight: Flight) {
-      console.log('CLICK HANDLER FIRED');
-    console.log('Clicked flight object:', flight);
-    let flightId = flight.flightId;
-    console.log(flightId);
+    console.log("book ticket clicked");
+    const flightId = flight.flightId;
+
     this.authService.currentUser
       .pipe(
         take(1),

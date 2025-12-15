@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth-service';
+import { AuthService } from '../../services/Authentication/auth-service';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-loggedin-page',

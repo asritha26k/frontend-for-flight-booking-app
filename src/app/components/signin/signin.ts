@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { user } from '../../models/user';
-import { AuthService } from '../../services/auth-service';
+import { AuthService } from '../../services/Authentication/auth-service';
 import { FormControl, FormGroup,  ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { usernameValidator } from '../../validatorFunctions/usernameValidator';

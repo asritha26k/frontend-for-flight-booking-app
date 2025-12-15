@@ -1,20 +1,26 @@
 import { Component } from '@angular/core';
 import { userDetails } from '../../models/userDetails';
 import { UserRole } from '../../enums/user-role.enum';
-import { AuthService } from '../../services/auth-service';
+import { AuthService } from '../../services/Authentication/auth-service';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { usernameValidator } from '../../validatorFunctions/usernameValidator';
 import { passwordValidator } from '../../validatorFunctions/passwordValidator';
+import { Observable } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 @Component({
   selector: 'app-signup',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,AsyncPipe],
   templateUrl: './signup.html',
   standalone:true,
   styleUrl: './signup.css',
 })
 export class Signup {
+  error$!: Observable<string | null>;
   constructor(private readonly auth:AuthService,private readonly router:Router){}
+  ngOnInit(): void {
+    this.error$ = this.auth.error$;
+  }
   isroleSelected:boolean=false;
   selectedRole:string="";
   UserRole = UserRole; 
@@ -24,7 +30,6 @@ export class Signup {
     password:"",
     roles :[UserRole.ROLE_USER],
   }
-
 form=new FormGroup(
 {
   email:new FormControl('',[Validators.required,Validators.email]),
@@ -44,24 +49,16 @@ form=new FormGroup(
     this.selectedRole="User";
   }
 }
-submit(){
-  this.userDetails.username=this.form.value.username!;
-  this.userDetails.email=this.form.value.email!;
-  this.userDetails.password=this.form.value.password!;
+submit() {
+  this.userDetails.username = this.form.value.username!;
+  this.userDetails.email = this.form.value.email!;
+  this.userDetails.password = this.form.value.password!;
+
   this.auth.signup(this.userDetails).subscribe({
-    
-      next:()=> {console.log('Signup successful');
-        this.router.navigate(['/signin']);
-
-      }
-
-    ,
-    
- error:(error)=>{ console.error('Sign up failed:',error.message);
+    next: () => {
+      console.log('Signup successful');
+      this.router.navigate(['/signin']);
     }
+  });
 }
-  );
-}
-
-
 }
