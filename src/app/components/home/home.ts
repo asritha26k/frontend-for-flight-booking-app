@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { searchReq } from '../../models/searchReq';
 import { Router } from '@angular/router';
+// import { FlightList } from '../flight-list/flight-list';
 @Component({
   selector: 'app-home',
   imports: [FormsModule],
@@ -16,6 +17,7 @@ export class Home {
   destination: ''
 };
 onSubmit() {
+  console.log("clicked search button");
   this.router.navigate(['/flights'], {
     state:{
       searchData:{
