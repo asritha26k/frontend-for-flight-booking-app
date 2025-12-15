@@ -45,3 +45,8 @@
 </div>
 </form>
 </div>
+@if (flights$) {
+  <app-flight-list
+    [flights]="flights$ | async">
+  </app-flight-list>
+}
