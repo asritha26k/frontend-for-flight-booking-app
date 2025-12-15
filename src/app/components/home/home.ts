@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { searchReq } from '../../models/searchReq';
+import { searchReq } from '../../models/searchRequest';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { Flight } from '../../models/Flight';

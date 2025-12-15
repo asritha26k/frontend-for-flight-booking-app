@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
-import { searchReq } from '../../models/searchReq';
+import { searchReq } from '../../models/searchRequest';
 import { Flight } from '../../models/Flight';
 
 @Injectable({
