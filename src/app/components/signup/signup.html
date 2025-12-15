@@ -43,7 +43,7 @@
   </div>
    </div>
   <div class="dropdown">
-<button [disabled]="form.invalid"
+<button 
   class="btn btn-sm btn-secondary dropdown-toggle my-3"
   type="button"
   id="dropdownMenuButton"
@@ -76,6 +76,6 @@
 </div>
 </div>
 
-  <button  type="submit" class="btn btn-primary my-2 ">Submit</button>
+  <button  [disabled]="form.invalid" type="submit" class="btn btn-primary my-2 ">Submit</button>
 </form>
 </div>
