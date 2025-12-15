@@ -34,6 +34,11 @@ html, body {
   border-color: #607B8F !important;
   color: #ffffff;
 }
+.bg-secondary{
+    background-color: #607B8F !important;
+  border-color: #607B8F !important;
+  color: #ffffff;
+}
 
 .btn-secondary:hover {
   background-color: #566d80 !important;
