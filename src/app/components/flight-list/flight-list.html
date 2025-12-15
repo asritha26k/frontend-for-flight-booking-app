@@ -4,19 +4,18 @@
   <div class="d-flex justify-content-center align-items-center gap-3 mt-5 flex-wrap">
     @for(flight of flights;track flight.flightId){
     <div
-      class="card"
-      style="width: 18rem;"
+      class="card w-100 "
+     
     >
-      <div class="card-body">
-        <h3>{{ flight.airline }}</h3>
+      <div class="card-body d-flex flex-row justify-content-between mx-10">
+        <h5>{{ flight.airline }}</h5>
 
         <h5 class="text-muted">
           {{ flight.origin }} → {{ flight.destination }}
         </h5>
+<span class="badge text-bg-success">  {{ flight.price | currency:'INR'}}</span>
+       
 
-        <p class="text-success border rounded">
-          {{ flight.price | currency:'INR'}}
-        </p>
 
         <h6>
           Arrival: {{ flight.arrivalTime | date:'dd MMM yyyy, hh:mm a' }}

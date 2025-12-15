@@ -10,6 +10,7 @@ import { AuthService } from '../../services/auth-service';
 import { PassengerService } from '../../services/passenger-service';
 import { take, switchMap } from 'rxjs/operators';
 
+
 @Component({
   selector: 'app-flight-list',
   standalone: true,
