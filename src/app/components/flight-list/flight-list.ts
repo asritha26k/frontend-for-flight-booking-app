@@ -20,7 +20,8 @@ import { take, switchMap } from 'rxjs/operators';
 })
 export class FlightList {
 
-  @Input() flights: Flight[] | null = [];
+  @Input() flights: Flight[] | null = []; //we get this input from the parent component which is home!!
+  //and we display it using our template
 
   constructor(
     private readonly router: Router,
@@ -34,7 +35,7 @@ export class FlightList {
 
   this.authService.currentUser
     .pipe(
-      take(1),
+      take(1), //take the first value and unsubscribes, if not it just listens forever as behaviour subject never completes
       switchMap(user => {
         if (!user?.email) {
           this.router.navigate(['/signin']);
@@ -51,7 +52,7 @@ export class FlightList {
 
         // passenger exists → go to booking page
         this.router.navigate(['/book'], {
-          state: { flightId }
+          queryParams: { flightId } //You need this. only for class properties or methods, not for local variables.
         });
       },
       error: err => {

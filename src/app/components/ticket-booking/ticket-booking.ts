@@ -13,7 +13,8 @@ import { TicketService } from '../../services/TicketService/ticket-service';
 import { Ticket } from '../../models/Ticket';
 import { AuthService } from '../../services/Authentication/auth-service';
 import { PassengerService } from '../../services/PassengerService/passenger-service';
-
+import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-ticket-booking',
   standalone: true,
@@ -34,10 +35,20 @@ export class TicketBooking implements OnInit {
   constructor(
     private readonly ticketService: TicketService,
     private readonly authService: AuthService,private readonly passengerService:PassengerService
+    ,private readonly router:Router,private readonly route:ActivatedRoute
   ) {}
 
 ngOnInit(): void {
-  this.flightId = history.state?.flightId;
+  // this.flightId = history.state?.flightId;
+  // this.route.queryParamMap.subscribe(params=>{
+  //   this.flightId=Number(params.get('flightId'));
+  //    if(!this.flightId){
+  //   this.router.navigate(['/']);
+  // }
+  // });
+  this.flightId = Number(this.route.snapshot.queryParamMap.get('flightId'));
+
+ 
   console.log('Flight ID:', this.flightId);
 
   this.tickets$ = this.refresh$.pipe(
