@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   get currentUser() {
-    return this.me$.asObservable();
+    return this.me$.asObservable(); //we are sending it as observable to avoid mutations like an getter we can think
   }
 
   signup(user: userDetails) {
