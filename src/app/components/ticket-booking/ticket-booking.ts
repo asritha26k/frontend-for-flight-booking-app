@@ -46,7 +46,7 @@ ngOnInit(): void {
   //   this.router.navigate(['/']);
   // }
   // });
-  this.flightId = Number(this.route.snapshot.queryParamMap.get('flightId'));
+  this.flightId = Number(this.route.snapshot.queryParamMap.get('flightId'));//simpler version as flighid wont change 
 
  
   console.log('Flight ID:', this.flightId);
