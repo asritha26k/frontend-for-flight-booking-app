@@ -13,6 +13,7 @@ export class PassengerService {
   constructor(private readonly http: HttpClient) {}
 
   registerPassenger(profile: Profile) {
+     console.log('Register payload:', profile);
     return this.http.post<number>(
       `${this.BASE_URL}/register`,
       profile,
@@ -20,21 +21,19 @@ export class PassengerService {
     );
   }
 
-  getPassengerByUserId(authUserId: number) {
+  getPassengerByUserId(passengerId: number) {
+    console.log(passengerId);
     return this.http.get<Profile>(
-      `${this.BASE_URL}/getByPassengerId/${authUserId}`,
+      `${this.BASE_URL}/getByPassengerId/${passengerId}`,
       { withCredentials: true }
     );
   }
 
-  getPassengerByEmail(email: string) {
-    return this.http
-      .get<number>(
-        `${this.BASE_URL}/getPassengerIdByEmail/${email}`,
-        { withCredentials: true }
-      )
-      .pipe(
-        switchMap(id => this.getPassengerByUserId(id))
-      );
-  }
+getPassengerIdByEmail(email: string) {
+  return this.http.get<number>(
+    `${this.BASE_URL}/getPassengerIdByEmail/${email}`,
+    { withCredentials: true }
+  );
+}
+
 }

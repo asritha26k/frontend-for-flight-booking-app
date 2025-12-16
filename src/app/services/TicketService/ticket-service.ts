@@ -26,7 +26,7 @@ export class TicketService {
     passengerId: passengerId,
     seatNo: seatNo
   };
-
+  console.log('Book Ticket Payload:', payload);
 return this.http.post(
   'http://localhost:8765/ticket-service/ticket/book',
   payload,

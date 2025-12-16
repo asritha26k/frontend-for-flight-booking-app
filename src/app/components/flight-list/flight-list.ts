@@ -29,33 +29,40 @@ export class FlightList {
   ) {}
 
   SendFlightId(flight: Flight) {
-    console.log("book ticket clicked");
-    const flightId = flight.flightId;
+  console.log('book ticket clicked');
+  const flightId = flight.flightId;
 
-    this.authService.currentUser
-      .pipe(
-        take(1),
-        switchMap(user => {
-          if (!user?.email) {
-            this.router.navigate(['/signin']);
-            throw new Error('No user');
-          }
-          return this.passengerService.getPassengerByEmail(user.email);
-        })
-      )
-      .subscribe({
-        next: () => {
-          this.router.navigate(['/book'], {
-            state: { flightId }
-          });
-        },
-        error: err => {
-          if (err.status === 404) {
-            this.router.navigate(['/register']);
-          } else {
-            console.error(err);
-          }
+  this.authService.currentUser
+    .pipe(
+      take(1),
+      switchMap(user => {
+        if (!user?.email) {
+          this.router.navigate(['/signin']);
+          throw new Error('User not logged in');
         }
-      });
-  }
+
+        // email → passengerId (number)
+        return this.passengerService.getPassengerIdByEmail(user.email);
+      })
+    )
+    .subscribe({
+      next: passengerId => {
+        console.log('Passenger ID found:', passengerId);
+
+        // passenger exists → go to booking page
+        this.router.navigate(['/book'], {
+          state: { flightId }
+        });
+      },
+      error: err => {
+        // passenger not registered
+        if (err.status === 404) {
+          this.router.navigate(['/register']);
+        } else {
+          console.error(err);
+        }
+      }
+    });
+}
+
 }

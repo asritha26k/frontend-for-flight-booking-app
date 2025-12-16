@@ -1,6 +1,9 @@
-<p>ticket-booking works!</p>
-<div class="d-flex justify-content-center align-items-center">
-<form>
+
+<div class="d-flex justify-content-center align-items-center min-vh-100 flex-column">
+  <div class="d-flex justify-content-center  my-5">
+  <h3>Book your ticket here</h3>
+</div>
+<form class="card p-4" (ngSubmit)=" bookTicket()">
   <div class="form-group">
     <label for="seatNo">SeatNo</label>
     <input [(ngModel)]="seatNo" name="seatNo"
@@ -10,19 +13,51 @@
       placeholder="Enter seatNO">
   </div>
 
-  <button (click)=" bookTicket()" type="submit" class="btn btn-primary my-2">Book</button>
+  <button  type="submit" class="btn btn-primary my-2">Book</button>
 </form>
 </div>
-<p>ticket-booking works!</p>
+<!-- <p>ticket-booking works!</p> -->
 
 @if(tickets$ | async; as tickets){
 <ul class="list-group" >
-  @for(ticket of tickets;track ticket.id){
-  <li class="list-group-item" >
-    <b>{{ ticket.origin }} → {{ ticket.destination }}</b><br />
-    PNR: {{ ticket.pnr }}<br />
-    {{ ticket.departureTime }} - {{ ticket.arrivalTime }}
-  </li>
+  @for(ticket of tickets;track ticket.pnr){
+    <div class="my-3  d-flex justify-content-center  align-items-center w-100">
+  <div class="card p-4 d-flex flex-row justify-content-between align-items-center w-75 ">
+
+    <!-- Route -->
+    <h5 class="fw-semibold mb-2">
+      {{ ticket.origin }} 
+      <span class="text-muted mx-2">→</span> 
+      {{ ticket.destination }}
+    </h5>
+
+    <!-- PNR -->
+    <div class="text-muted small mb-2">
+      PNR: <span class="fw-medium text-dark">{{ ticket.pnr }}</span>
+    </div>
+
+    <!-- Time -->
+    <div class="d-flex justify-content-between align-items-center gap-3">
+      <div>
+        <div class="fw-bold">
+          {{ ticket.departureTime | date:'hh:mm a' }}
+        </div>
+        <small class="text-muted">Departure</small>
+      </div>
+
+     
+
+      <div class="text-end">
+        <div class="fw-bold">
+          {{ ticket.arrivalTime | date:'hh:mm a' }}
+        </div>
+        <small class="text-muted">Arrival</small>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 }
 
 
