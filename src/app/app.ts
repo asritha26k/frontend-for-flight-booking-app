@@ -34,5 +34,9 @@ export class App {
     },
     error: err => console.error(err)
   });
+  
 }
+seeTickets(){
+    this.router.navigate(['/tickets']);
+  }
 }

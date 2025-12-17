@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TicketList } from '../ticket-list/ticket-list';
 import {
   Observable,
   Subject,
   switchMap,
   take,
-  startWith
+  startWith,
+  of
 } from 'rxjs';
 
 import { TicketService } from '../../services/TicketService/ticket-service';
@@ -18,7 +20,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-ticket-booking',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,TicketList],
   templateUrl: './ticket-booking.html',
   styleUrl: './ticket-booking.css',
 })
@@ -26,6 +28,7 @@ export class TicketBooking implements OnInit {
 
   tickets$!: Observable<Ticket[]>;
   private refresh$ = new Subject<void>();
+  ticketBookedMessage$!:Observable<string>;
 
   flightId!: number;
   passengerId!: number;
@@ -91,6 +94,11 @@ bookTicket() {
   ).subscribe({
     next: () => {
       console.log('Ticket booked');
+       this.ticketBookedMessage$.pipe(
+        switchMap(()=>
+          "Ticket booking successful"
+        )
+       );
       this.seatNo = '';
       this.refresh$.next();
     },

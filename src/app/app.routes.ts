@@ -9,13 +9,15 @@ import { adminGuard } from './gaurds/admin.gaurd';
 import { TicketBooking } from './components/ticket-booking/ticket-booking';
 import { userOrAdminGuard } from './gaurds/userOrAdminGuard';
 import { PassengerRegistration } from './components/passenger-registration/passenger-registration';
+import { TicketList } from './components/ticket-list/ticket-list';
 export const routes: Routes = [
     {path:'',component:Home},
     {path:'signup',component:Signup},
     {path:'signin',component:Signin},
     {path:'flights',component:FlightList},
     {path:'book',component:TicketBooking,canActivate: [userOrAdminGuard]},
-    {path:'register',component:PassengerRegistration,canActivate: [userOrAdminGuard]}
+    {path:'register',component:PassengerRegistration,canActivate: [userOrAdminGuard]},
+    {path:'tickets',component:TicketList,canActivate:[userOrAdminGuard]}
 
 
 
