@@ -2,7 +2,7 @@ export interface Profile {
   id?:number;
   name: string;
   email: string;
-  phoneNumber: string;
+  phoneNum: string;
 houseNo:string;
   city: string;
   state: string;

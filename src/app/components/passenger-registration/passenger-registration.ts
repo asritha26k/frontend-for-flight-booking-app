@@ -34,7 +34,22 @@ isPassengerRegistered = false;
       next: (passengerId) => {
         if (passengerId) {
           this.isPassengerRegistered = true;
+          this.passengerService.getPassengerByUserId(passengerId).subscribe({next: (passenger)=>{
+            console.log(passenger);
+            this.form.get('name')?.setValue(passenger.name);
+            this.form.get('city')?.setValue(passenger.city);
+            this.form.get('phoneNumber')?.setValue(passenger.phoneNum);
+            this.form.get('houseNo')?.setValue(passenger.houseNo);
+            this.form.get('state')?.setValue(passenger.state);
+          },
+          error:()=>{
+            console.log("cannot bind data from model to ui");
+          }
         }
+          )
+
+        }
+
         this.checking = false;
       },
       error: () => {
@@ -63,7 +78,7 @@ isPassengerRegistered = false;
 
       const profile = {
         name: this.form.value.name!,
-        phoneNumber: this.form.value.phoneNumber!,
+        phoneNum: this.form.value.phoneNumber!,
         email: user.email,
         houseNo: this.form.value.houseNo!,
         city: this.form.value.city!,
