@@ -42,7 +42,7 @@ export class FlightList {
           throw new Error('User not logged in');
         }
 
-        // email → passengerId (number)
+        // email then passengerId (number)
         return this.passengerService.getPassengerIdByEmail(user.email);
       })
     )
@@ -50,9 +50,9 @@ export class FlightList {
       next: passengerId => {
         console.log('Passenger ID found:', passengerId);
 
-        // passenger exists → go to booking page
+        // passenger exists then go to booking page
         this.router.navigate(['/book'], {
-          queryParams: { flightId } //You need this. only for class properties or methods, not for local variables.
+          queryParams: { flightId } 
         });
       },
       error: err => {
