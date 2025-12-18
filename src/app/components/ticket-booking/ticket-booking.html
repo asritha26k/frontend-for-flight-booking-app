@@ -1,13 +1,14 @@
-@if(ticketBookedMessage$ | async){
-  <div class="d-flex justify-content-center">
-    <div class="alert alert-success"> 
-      {{ticketBookedMessage$}}
-    </div>
-  </div>
-}
+
 <div class="d-flex justify-content-center align-items-center min-vh-100 flex-column">
-  <div class="d-flex justify-content-center  my-5">
+  <div class="d-flex justify-content-center  my-5 flex-column">
+    @if (ticketBookedMessage$ | async; as msg) {
+    <div class="alert alert-info text-center">
+      {{ msg }}
+    </div>
+  }
   <h3>Book your ticket here</h3>
+    
+
 </div>
 <form class="card p-4" (ngSubmit)=" bookTicket()">
   <div class="form-group">
@@ -23,58 +24,5 @@
 </form>
 </div>
 
+
 <app-ticket-list [tickets]="tickets$ | async"></app-ticket-list>
-<!-- 
-
-@if(tickets$ | async; as tickets){
-<ul class="list-group" >
-  @for(ticket of tickets;track ticket.pnr){
-    <div class="my-3  d-flex justify-content-center  align-items-center w-100">
-  <div class="card p-4 d-flex flex-row justify-content-between align-items-center w-75 ">
-
-    
-    <h5 class="fw-semibold mb-2">
-      {{ ticket.origin }} 
-      <span class="text-muted mx-2">→</span> 
-      {{ ticket.destination }}
-    </h5>
-
-    
-    <div class="text-muted small mb-2">
-      PNR: <span class="fw-medium text-dark">{{ ticket.pnr }}</span>
-    </div>
-
-    
-    <div class="d-flex justify-content-between align-items-center gap-3">
-      <div>
-        <div class="fw-bold">
-          {{ ticket.departureTime | date:'hh:mm a' }}
-        </div>
-        <small class="text-muted">Departure</small>
-      </div>
-
-     
-
-      <div class="text-end">
-        <div class="fw-bold">
-          {{ ticket.arrivalTime | date:'hh:mm a' }}
-        </div>
-        <small class="text-muted">Arrival</small>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-}
-
-
- 
-  @if(tickets.length===0){
- <li class="list-group-item text-muted" >
-    No tickets found
-  </li>
-  }
-</ul>
-}
--->

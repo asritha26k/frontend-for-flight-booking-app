@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { Observable, of, switchMap, take } from 'rxjs';
 import { Ticket } from '../../models/Ticket';
 import { TicketService } from '../../services/TicketService/ticket-service';
 import { AuthService } from '../../services/Authentication/auth-service';
 import { AsyncPipe, DatePipe } from '@angular/common';
+import { SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-ticket-list',
@@ -12,7 +13,7 @@ import { AsyncPipe, DatePipe } from '@angular/common';
   styleUrl: './ticket-list.css',
   imports:[ AsyncPipe, DatePipe]
 })
-export class TicketList implements OnInit {
+export class TicketList implements OnInit, OnChanges {
 
   @Input() tickets: Ticket[] | null = null;
 
@@ -24,20 +25,20 @@ export class TicketList implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.tickets) {
-      
-      this.tickets$ = of(this.tickets);
-    } else {
-    
+    if (!this.tickets) {
       this.tickets$ = this.authService.currentUser.pipe(
         take(1),
         switchMap(user => {
-          if (!user?.email) {
-            throw new Error('User not logged in');
-          }
+          if (!user?.email) throw new Error('User not logged in');
           return this.ticketService.getTicketsByEmail(user.email);
         })
       );
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['tickets'] && this.tickets) {
+      this.tickets$ = of(this.tickets);
     }
   }
 }

@@ -7,20 +7,19 @@ import {
   Subject,
   switchMap,
   take,
-  startWith,
-  of
+  startWith
 } from 'rxjs';
 
 import { TicketService } from '../../services/TicketService/ticket-service';
 import { Ticket } from '../../models/Ticket';
 import { AuthService } from '../../services/Authentication/auth-service';
 import { PassengerService } from '../../services/PassengerService/passenger-service';
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-ticket-booking',
   standalone: true,
-  imports: [CommonModule, FormsModule,TicketList],
+  imports: [CommonModule, FormsModule, TicketList],
   templateUrl: './ticket-booking.html',
   styleUrl: './ticket-booking.css',
 })
@@ -28,83 +27,72 @@ export class TicketBooking implements OnInit {
 
   tickets$!: Observable<Ticket[]>;
   private refresh$ = new Subject<void>();
-  ticketBookedMessage$!:Observable<string>;
+
+  ticketBookedMessage$ = new Subject<string>();
 
   flightId!: number;
-  passengerId!: number;
-  passengerEmail!:string;
   seatNo!: string;
 
   constructor(
     private readonly ticketService: TicketService,
-    private readonly authService: AuthService,private readonly passengerService:PassengerService
-    ,private readonly router:Router,private readonly route:ActivatedRoute
+    private readonly authService: AuthService,
+    private readonly passengerService: PassengerService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
   ) {}
 
-ngOnInit(): void {
-  // this.flightId = history.state?.flightId;
-  // this.route.queryParamMap.subscribe(params=>{
-  //   this.flightId=Number(params.get('flightId'));
-  //    if(!this.flightId){
-  //   this.router.navigate(['/']);
-  // }
-  // });
-  this.flightId = Number(this.route.snapshot.queryParamMap.get('flightId'));//simpler version as flighid wont change 
+  ngOnInit(): void {
+    this.flightId = Number(this.route.snapshot.queryParamMap.get('flightId'));
 
- 
-  console.log('Flight ID:', this.flightId);
+    if (!this.flightId) {
+      this.router.navigate(['/']);
+      return;
+    }
 
-  this.tickets$ = this.refresh$.pipe(
-    startWith(void 0),
-    switchMap(() =>
-      this.authService.currentUser.pipe(
-        take(1),
-        switchMap(user => {
-          if (!user) {
-            throw new Error('User not logged in');
-          }
-
-          this.passengerEmail = user.email;
-          return this.ticketService.getTicketsByEmail(user.email);
-        })
-      )
-    )
-  );
-}
-bookTicket() {
-  this.authService.currentUser.pipe(
-    take(1),
-    switchMap(user => {
-      if (!user) {
-        throw new Error('User not logged in');
-      }
-
-      // email → passengerId
-      return this.passengerService.getPassengerIdByEmail(user.email);
-    }),
-    switchMap(passengerId => {
-      console.log('Passenger ID:', passengerId);
-
-      return this.ticketService.bookTicketByPassengerIdandFlightId(
-        this.flightId,
-        passengerId,
-        this.seatNo
-      );
-    })
-  ).subscribe({
-    next: () => {
-      console.log('Ticket booked');
-       this.ticketBookedMessage$.pipe(
-        switchMap(()=>
-          "Ticket booking successful"
+    this.tickets$ = this.refresh$.pipe(
+      startWith(void 0),
+      switchMap(() =>
+        this.authService.currentUser.pipe(
+          take(1),
+          switchMap(user => {
+            if (!user) {
+              throw new Error('User not logged in');
+            }
+            return this.ticketService.getTicketsByEmail(user.email);
+          })
         )
-       );
-      this.seatNo = '';
-      this.refresh$.next();
-    },
-    error: err => console.error('Booking failed', err),
-  });
-}
+      )
+    );
+  }
 
+  bookTicket() {
+    if (!this.seatNo) return;
 
+    this.authService.currentUser.pipe(
+      take(1),
+      switchMap(user => {
+        if (!user) {
+          throw new Error('User not logged in');
+        }
+        return this.passengerService.getPassengerIdByEmail(user.email);
+      }),
+      switchMap(passengerId =>
+        this.ticketService.bookTicketByPassengerIdandFlightId(
+          this.flightId,
+          passengerId,
+          this.seatNo
+        )
+      )
+    ).subscribe({
+      next: () => {
+        this.ticketBookedMessage$.next('Ticket booking successful');
+        this.seatNo = '';
+        this.refresh$.next();
+      },
+      error: err => {
+        console.error('Booking failed', err);
+        this.ticketBookedMessage$.next('Ticket booking failed');
+      }
+    });
+  }
 }

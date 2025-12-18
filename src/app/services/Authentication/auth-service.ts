@@ -21,6 +21,7 @@ export class AuthService {
 
   constructor(private readonly http: HttpClient) {
     this.loadMe();
+    //when site refreshes we can actually have the current user data!
   }
 
   private loadMe() {
