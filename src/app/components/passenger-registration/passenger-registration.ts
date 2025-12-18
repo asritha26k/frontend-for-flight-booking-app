@@ -1,55 +1,86 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PassengerService } from '../../services/PassengerService/passenger-service';
 import { Router, RouterModule } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/Authentication/auth-service';
+import { of, switchMap, take } from 'rxjs';
 
 @Component({
   selector: 'app-passenger-registration',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterModule,CommonModule ],
+  imports: [ReactiveFormsModule, RouterModule, CommonModule],
   templateUrl: './passenger-registration.html',
   styleUrl: './passenger-registration.css',
 })
-export class PassengerRegistration {
-
+export class PassengerRegistration implements OnInit {
+isPassengerRegistered = false;
+  checking = true;
   constructor(
     private readonly passengerService: PassengerService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly authService: AuthService
   ) {}
-  // constructor() {
-  //   console.log('PassengerRegistration loaded');
-  // }
+  ngOnInit() {
+    this.authService.currentUser.pipe(
+      take(1),
+      switchMap(user => {
+        if (!user?.email) {
+          return of(null);
+        }
+        return this.passengerService.getPassengerIdByEmail(user.email);
+      })
+    ).subscribe({
+      next: (passengerId) => {
+        if (passengerId) {
+          this.isPassengerRegistered = true;
+        }
+        this.checking = false;
+      },
+      error: () => {
+        this.isPassengerRegistered = false;
+        this.checking = false;
+      }
+    });
+  }
 
   form = new FormGroup({
     name: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required),
-    email: new FormControl('', [Validators.required, Validators.email]),
     houseNo: new FormControl('', Validators.required),
     city: new FormControl('', Validators.required),
     state: new FormControl('', Validators.required),
   });
 
   register() {
-    const profile = {
-      name: this.form.value.name!,
-      phoneNumber: this.form.value.phoneNumber!,
-      email: this.form.value.email!,
-      houseNo: this.form.value.houseNo!,
-      city: this.form.value.city!,
-      state: this.form.value.state!,
-    };
+    if (this.form.invalid) return;
 
-    console.log('Register payload:', profile);
-
-    this.passengerService.registerPassenger(profile).subscribe({
-      next: (id) => {
-        console.log('Passenger registered with id:', id);
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        console.error('Registration failed', err);
+    this.authService.currentUser.pipe(take(1)).subscribe(user => {
+      if (!user?.email) {
+        console.error('User not logged in');
+        return;
       }
+
+      const profile = {
+        name: this.form.value.name!,
+        phoneNumber: this.form.value.phoneNumber!,
+        email: user.email,
+        houseNo: this.form.value.houseNo!,
+        city: this.form.value.city!,
+        state: this.form.value.state!,
+      };
+
+      console.log('Register payload:', profile);
+
+      this.passengerService.registerPassenger(profile).subscribe({
+        next: (id) => {
+          console.log('Passenger registered with id:', id);
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          console.error('Registration failed', err);
+        }
+      });
     });
   }
 }

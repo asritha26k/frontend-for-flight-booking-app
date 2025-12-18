@@ -34,8 +34,11 @@ export class App {
     },
     error: err => console.error(err)
   });
-  
+ 
 }
+ seeProfile(){
+    this.router.navigate(['/register']);
+  }
 seeTickets(){
     this.router.navigate(['/tickets']);
   }
