@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { usernameValidator } from '../../validatorFunctions/usernameValidator';
 import { passwordValidator } from '../../validatorFunctions/passwordValidator';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 @Component({
@@ -18,6 +18,7 @@ import { RouterModule } from '@angular/router';
 })
 export class Signup {
   error$!: Observable<string | null>;
+  signedin:string="";
   constructor(private readonly auth:AuthService,private readonly router:Router){}
   ngOnInit(): void {
     this.auth.clearError();
@@ -59,8 +60,12 @@ submit() {
   this.auth.signup(this.userDetails).subscribe({
     next: () => {
       console.log('Signup successful');
+      this.signedin="sucess";
        this.auth.clearError();
-      this.router.navigate(['/signin']);
+      this.router.navigate(['/signin'],{
+         queryParams: { signedin: 'success' }
+      }
+      );
     }
   });
 }
