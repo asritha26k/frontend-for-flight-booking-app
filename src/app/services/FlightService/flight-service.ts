@@ -17,7 +17,7 @@ export class FlightService {
   getFlightByOriginAndDestination(req: searchReq): Observable<Flight[]> {
     return this.http
       .post<Flight[]>(
-        `${this.BASE_URL}/getByOriginDestination`,
+        `${this.BASE_URL}/getByOriginDestinationDateTime`,
         req,
         { withCredentials: true }
       )

@@ -1,59 +1,84 @@
-  <div class="my-7">
-  <div ><h4 class="text-center">Search for flights</h4></div>
+<div class="my-4 ">
+  <h4 class="text-center mb-3">Search for flights</h4>
 
-<div   class="d-flex justify-content-center align-items-center w-100" >
+  <div class="d-flex justify-content-center ">
+    <form
+      [formGroup]="form"
+      class="card p-3 shadow-sm w-75 rounded-pill px-4"
+      (ngSubmit)="onSubmit()"
+    >
+      <div class="d-flex gap-3 align-items-center justify-content-between">
 
-<form [formGroup]="form"   class="card p-4 shadow-sm w-80 rounded-pill " (ngSubmit)="onSubmit()">
-  <div  class="d-flex gap-3 flex-row align-items-center justify-content-between">
-  <div  class="form-group d-flex flex-row justify-content-between">
-    <label class="mx-3" for="originId">Origin</label>
-    <div class="d-flex flex-column position-relative">
-    <input formControlName="origin"  placeholder="Enter origin"  id="originId" class="form-control form-control-sm py-1 rounded-pill"  >
-    <div class="error-slot ">
-        @if(form.get('origin')?.invalid && form.get('origin')?.dirty){
-       @if(form.get('origin')?.errors?.['pattern']){
-    <small class="text-danger position-absolute"  style="font-size: 12px;">*Only alphabets are allowed</small>   
-  }
-  }
+        <!-- Origin -->
+        <div class="form-group d-flex flex-row gap-2">
+          <label for="originId">Origin</label>
+          <input
+            id="originId"
+            formControlName="origin"
+            placeholder="Enter origin"
+            class="form-control form-control-sm rounded-pill"
+          />
+          @if (form.get('origin')?.invalid && form.get('origin')?.dirty) {
+            @if (form.get('origin')?.errors?.['pattern']) {
+              <small class="text-danger" style="font-size:12px">
+                *Only alphabets are allowed
+              </small>
+            }
+          }
+        </div>
+
+        <!-- Destination -->
+        <div class="form-group d-flex flex-row gap-2">
+          <label for="destinationId">Destination</label>
+          <input
+            id="destinationId"
+            formControlName="destination"
+            placeholder="Enter destination"
+            class="form-control form-control-sm rounded-pill"
+          />
+
+          @if (form.get('destination')?.invalid && form.get('destination')?.dirty) {
+            @if (form.get('destination')?.errors?.['pattern']) {
+              <small class="text-danger" style="font-size:12px">
+                *Only alphabets are allowed
+              </small>
+            }
+          }
+
+          @if (form.hasError('sameLocation')) {
+            <small class="text-danger" style="font-size:12px">
+              *Origin and destination cannot be the same
+            </small>
+          }
+        </div>
+
+        <!-- Date -->
+        <div class="form-group d-flex flex-row gap-2">
+          <label for="departureDate">Date</label>
+          <input
+            id="departureDate"
+            type="date"
+            formControlName="departureDate"
+            class="form-control form-control-sm rounded-pill"
+            [min]="minDate"
+          />
+        </div>
+
+        <!-- Button -->
+        <button
+  type="submit"
+  class="btn btn-primary rounded-pill px-4 d-flex align-items-center gap-2"
+  [disabled]="form.invalid"
+>
+  <span class="material-symbols-outlined">search</span>
+  Search
+</button>
+
+      </div>
+    </form>
   </div>
-  </div>
-  </div>
-  <div   style="min-height: 16px" class="form-group d-flex flex-row justify-content-between">
-  <label class="mx-3" for="destinationId">Destination</label>
-
- <div class="d-flex flex-column position-relative">
-  <input
-    formControlName="destination"
-    placeholder="Enter destination"
-    id="destinationId"
-    class="form-control form-control-sm py-1 rounded-pill"
-  />
-
-  @if (form.get('destination')?.invalid && form.get('destination')?.dirty) {
-    @if (form.get('destination')?.errors?.['pattern']) {
-      <small
-        class="text-danger position-absolute"
-        style="font-size: 12px; top: 100%; left: 12px;"
-      >
-        *Only alphabets are allowed
-      </small>
-    }
-  }
 </div>
 
-</div>
-
-  
-  <button [disabled]="form.invalid"  type="submit" class="btn btn-primary rounded-pill d-flex align-items-center gap-2 px-4 ">
-    <span class="material-symbols-outlined">search</span>
-    
-    Search</button>
-</div>
-</form>
-</div>
-</div>
 @if (flights$) {
-  <app-flight-list
-    [flights]="flights$ | async">
-  </app-flight-list>
+  <app-flight-list [flights]="flights$ | async"></app-flight-list>
 }
