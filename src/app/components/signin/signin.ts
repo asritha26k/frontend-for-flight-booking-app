@@ -8,9 +8,11 @@ import { passwordValidator } from '../../validatorFunctions/passwordValidator';
 import { filter, map, Observable, of, startWith, switchMap, timer } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { RouterModule } from '@angular/router';
+
 @Component({
   selector: 'app-signin',
-  imports: [ReactiveFormsModule,AsyncPipe],
+  imports: [ReactiveFormsModule,AsyncPipe,RouterModule ],
   standalone:true,
   templateUrl: './signin.html',
   styleUrls: ['./signin.css'],
