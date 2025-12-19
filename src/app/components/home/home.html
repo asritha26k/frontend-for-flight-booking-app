@@ -10,14 +10,16 @@
       <div class="d-flex gap-3 align-items-center justify-content-between">
 
         <!-- Origin -->
-        <div class="form-group d-flex flex-row gap-2">
+        <div class="form-group d-flex flex-row gap-2 ">
           <label for="originId">Origin</label>
+          <div class="d-flex flex-column position-relative">
           <input
             id="originId"
             formControlName="origin"
             placeholder="Enter origin"
             class="form-control form-control-sm rounded-pill"
           />
+          <div class="position-absolute my-4">
           @if (form.get('origin')?.invalid && form.get('origin')?.dirty) {
             @if (form.get('origin')?.errors?.['pattern']) {
               <small class="text-danger" style="font-size:12px">
@@ -25,18 +27,21 @@
               </small>
             }
           }
+          </div>
+          </div>
         </div>
 
         <!-- Destination -->
         <div class="form-group d-flex flex-row gap-2">
           <label for="destinationId">Destination</label>
+           <div class="d-flex flex-column position-relative">
           <input
             id="destinationId"
             formControlName="destination"
             placeholder="Enter destination"
             class="form-control form-control-sm rounded-pill"
           />
-
+<div class="position-absolute my-4">
           @if (form.get('destination')?.invalid && form.get('destination')?.dirty) {
             @if (form.get('destination')?.errors?.['pattern']) {
               <small class="text-danger" style="font-size:12px">
@@ -44,12 +49,14 @@
               </small>
             }
           }
+          </div>
 
           @if (form.hasError('sameLocation')) {
             <small class="text-danger" style="font-size:12px">
               *Origin and destination cannot be the same
             </small>
           }
+          </div>
         </div>
 
         <!-- Date -->
