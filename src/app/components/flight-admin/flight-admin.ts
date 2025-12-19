@@ -35,10 +35,10 @@ export class FlightAdmin implements OnInit {
     arrivalTime: '',
   };
   form = new FormGroup({
-    airline: new FormControl('', Validators.required),
+    airline: new FormControl('',  [Validators.required, Validators.pattern('^[A-Za-z ]+$')]),
     origin: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]),
     destination: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]),
-    price: new FormControl(0, Validators.required),
+    price: new FormControl(0, [Validators.required,Validators.pattern('^[0-9]+$')]),
     departureDate: new FormControl('', Validators.required),
     departureTime: new FormControl('', Validators.required),
     arrivalTime: new FormControl('', Validators.required),
