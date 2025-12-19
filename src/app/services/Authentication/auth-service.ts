@@ -15,8 +15,8 @@ export class AuthService {
   private readonly BASE_URL =
     'http://localhost:8765/auth-service/api/auth';
 
-  private me$ = new BehaviorSubject<UserResponse | null>(null);
-  private errorSubject = new BehaviorSubject<string | null>(null);
+  private readonly me$ = new BehaviorSubject<UserResponse | null>(null);
+  private readonly errorSubject = new BehaviorSubject<string | null>(null);
   error$ = this.errorSubject.asObservable();
 
   constructor(private readonly http: HttpClient) {
