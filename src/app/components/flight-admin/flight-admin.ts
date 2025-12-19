@@ -4,14 +4,22 @@ import { FlightAdminService } from '../../services/FlightAdmin/flight-admin-serv
 import { Flight } from '../../models/Flight';
 import { Observable, of } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-flight-admin',
-  imports: [ReactiveFormsModule,AsyncPipe],
+  imports: [ReactiveFormsModule,AsyncPipe, CommonModule],
   templateUrl: './flight-admin.html',
   styleUrl: './flight-admin.css',
 })
-export class FlightAdmin {
-  constructor(private flightAdmin:FlightAdminService){}
+export class FlightAdmin implements OnInit {
+   minDate!:string;
+ 
+ 
+  constructor(private readonly flightAdmin:FlightAdminService){}
+   ngOnInit(){
+    this.minDate=new Date().toISOString().split('T')[0];
+  }
   presentFlight$!: Observable<Flight>;
   flight:Flight={
     airline:'',
@@ -23,9 +31,10 @@ export class FlightAdmin {
   }
    form=new FormGroup(
     {
-      airline: new FormControl('',Validators.required),
-      origin: new FormControl('',Validators.required),
-      destination:new FormControl('',Validators.required),
+      airline: new FormControl('',Validators.required
+      ),
+      origin: new FormControl('',[Validators.required, Validators.pattern('^[A-Za-z ]+$')]),
+      destination:new FormControl('',[Validators.required, Validators.pattern('^[A-Za-z ]+$')]),
       price:new FormControl(0,Validators.required),
       departureDate:new FormControl('',Validators.required),
       departureTime:new FormControl('',Validators.required),
@@ -44,6 +53,10 @@ export class FlightAdmin {
       this.flight.departureTime=this.form.value.departureDate!+'T'+this.form.value.departureTime!+':00';
       this.flight.arrivalTime=this.form.value.arrivalDate!+'T'+this.form.value.arrivalTime!+':00';
       this.presentFlight$ = this.flightAdmin.flightAdd(this.flight);
-      this.form.reset();
+      this.form.reset({
+  departureDate: this.minDate,
+  arrivalDate: this.minDate
+});
+
     }
 }

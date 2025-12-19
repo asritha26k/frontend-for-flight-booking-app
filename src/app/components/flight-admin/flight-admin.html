@@ -21,14 +21,14 @@
 <label for="departureTime">Departure Date Time</label>
 <div class="d-flex flex-row gap-3">
 
-<input id="departureDate" type="date" class="form-control" formControlName="departureDate" placeholder="Enter departure date here">
+<input id="departureDate" type="date" [min]="minDate"   class="form-control" formControlName="departureDate" placeholder="Enter departure date here">
 <input id="departureTime" type="time" step="300" class="form-control" formControlName="departureTime" placeholder="Enter departure time here">
 </div>
 </div>
  <div class="form-group">
 <label for="arrivalTime">Arrival Date Time</label>
 <div class="d-flex flex-row gap-3">
-<input id="arrivalDate" type="date" class="form-control" formControlName="arrivalDate" placeholder="Enter arrival date here">
+<input id="arrivalDate" [min]="form.value.departureDate || minDate" type="date" class="form-control" formControlName="arrivalDate" placeholder="Enter arrival date here">
 <input id="arrivalTime" type="time" step="300" class="form-control" formControlName="arrivalTime" placeholder="Enter arrival time here">
 </div>
 </div>

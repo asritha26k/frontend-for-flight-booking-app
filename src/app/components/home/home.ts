@@ -21,6 +21,7 @@ export class Home implements OnInit {
   constructor(private readonly flightService: FlightService,private readonly searchState: searchingStateService ) {}
 
   ngOnInit() {
+     this.minDate=new Date().toISOString().split('T')[0];
   const request = this.searchState.get();
 console.log("while getting it",this.searchState.get());
   if (request?.departureDateTime) {
