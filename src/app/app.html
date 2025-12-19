@@ -18,11 +18,19 @@ flight_takeoff
 
 
         @if (currentUser$ | async; as user) {
+          
   <li class="nav-item">
     <span class="badge bg-secondary fs-6 px-3 py-2">
       Hi, {{ user.username }}
     </span>
   </li>
+  @if((user$ | async)=="admin"){
+            <li class="nav-item">
+    <button class="btn btn-primary" (click)="flightsAddPage()">
+      Add flights
+    </button>
+  </li>
+          }
   <li class="nav-item">
     <button class="btn btn-primary" (click)="seeProfile()">
       Profile
