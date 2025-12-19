@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit,OnDestroy } from '@angular/core';
 import { Observable, of, switchMap, take } from 'rxjs';
 import { Ticket } from '../../models/Ticket';
 import { TicketService } from '../../services/TicketService/ticket-service';
@@ -13,7 +13,7 @@ import { SimpleChanges } from '@angular/core';
   styleUrl: './ticket-list.css',
   imports:[ AsyncPipe, DatePipe]
 })
-export class TicketList implements OnInit, OnChanges {
+export class TicketList implements OnInit, OnChanges, OnDestroy {
 
   @Input() tickets: Ticket[] | null = null;
 
@@ -41,4 +41,7 @@ export class TicketList implements OnInit, OnChanges {
       this.tickets$ = of(this.tickets);
     }
   }
+  ngOnDestroy(): void {
+  console.log('TicketList component destroyed');
+}
 }

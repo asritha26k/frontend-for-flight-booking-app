@@ -15,7 +15,7 @@ import { Ticket } from '../../models/Ticket';
 import { AuthService } from '../../services/Authentication/auth-service';
 import { PassengerService } from '../../services/PassengerService/passenger-service';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import { searchingStateService } from '../../services/SavingStates/searchingStateService';
 @Component({
   selector: 'app-ticket-booking',
   standalone: true,
@@ -38,7 +38,8 @@ export class TicketBooking implements OnInit {
     private readonly authService: AuthService,
     private readonly passengerService: PassengerService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly searchingState: searchingStateService
   ) {}
 
   ngOnInit(): void {
@@ -85,6 +86,7 @@ export class TicketBooking implements OnInit {
       )
     ).subscribe({
       next: () => {
+        this.searchingState.clear();
         this.ticketBookedMessage$.next('Ticket booking successful');
         this.seatNo = '';
         this.refresh$.next();

@@ -9,6 +9,7 @@ import { searchReq } from '../../models/searchRequest';
 import { AuthService } from '../../services/Authentication/auth-service';
 import { PassengerService } from '../../services/PassengerService/passenger-service';
 import { take, switchMap } from 'rxjs/operators';
+import { searchingStateService } from '../../services/SavingStates/searchingStateService';
 
 
 @Component({
@@ -26,7 +27,8 @@ export class FlightList {
   constructor(
     private readonly router: Router,
     private readonly authService: AuthService,
-    private readonly passengerService: PassengerService
+    private readonly passengerService: PassengerService,
+    private readonly searchingState: searchingStateService
   ) {}
 
   SendFlightId(flight: Flight) {
@@ -51,6 +53,7 @@ export class FlightList {
         console.log('Passenger ID found:', passengerId);
 
         // passenger exists then go to booking page
+        
         this.router.navigate(['/book'], {
           queryParams: { flightId } 
         });
@@ -58,7 +61,9 @@ export class FlightList {
       error: err => {
         // passenger not registered
         if (err.status === 404) {
-          this.router.navigate(['/register']);
+          this.router.navigate(['/register'], {
+          queryParams: { flightId } 
+        });
         } else {
           console.error(err);
         }

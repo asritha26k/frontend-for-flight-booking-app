@@ -5,6 +5,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/Authentication/auth-service';
 import { of, switchMap, take } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-passenger-registration',
@@ -14,14 +15,17 @@ import { of, switchMap, take } from 'rxjs';
   styleUrl: './passenger-registration.css',
 })
 export class PassengerRegistration implements OnInit {
+  flightId!:number;
 isPassengerRegistered = false;
   checking = true;
   constructor(
     private readonly passengerService: PassengerService,
     private readonly router: Router,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly route:  ActivatedRoute
   ) {}
   ngOnInit() {
+    this.flightId=Number(this.route.snapshot.queryParamMap.get('flightId'));
     this.authService.currentUser.pipe(
       take(1),
       switchMap(user => {
@@ -86,11 +90,18 @@ isPassengerRegistered = false;
       };
 
       console.log('Register payload:', profile);
+const backendPayload = {
+  ...profile,
+  phoneNumber: profile.phoneNum
+};
 
-      this.passengerService.registerPassenger(profile).subscribe({
+delete (backendPayload as any).phoneNum;
+      this.passengerService.registerPassenger(backendPayload).subscribe({
         next: (id) => {
           console.log('Passenger registered with id:', id);
-          this.router.navigate(['/']);
+           this.router.navigate(['/book'], {
+          queryParams: {flightId: this.flightId} 
+        });
         },
         error: (err) => {
           console.error('Registration failed', err);
