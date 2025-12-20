@@ -7,5 +7,6 @@ export interface Ticket {
   pnr: string;
   departureTime: string;
   arrivalTime: string;
-  seatNo:string;
+  numberOfSeats:number;
+  booked?:true;
 }

@@ -64,11 +64,11 @@ isPassengerRegistered = false;
   }
 
   form = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]),
-    phoneNumber: new FormControl('', [Validators.required,Validators.pattern('^[0-9]+$')]),
-    houseNo: new FormControl('', [Validators.required,Validators.pattern('^[a-zA-Z0-9]+$')]),
-    city: new FormControl('', [Validators.required,Validators.pattern('^[A-Za-z]+$')]),
-    state: new FormControl('',  [Validators.required,Validators.pattern('^[A-Za-z]+$')]),
+    name: new FormControl('', [Validators.required]),
+    phoneNumber: new FormControl('', [Validators.required]),
+    houseNo: new FormControl('', [Validators.required]),
+    city: new FormControl('', [Validators.required]),
+    state: new FormControl('',  [Validators.required]),
   });
 
   register() {

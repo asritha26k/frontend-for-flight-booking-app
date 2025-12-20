@@ -24,6 +24,9 @@
           <h6>
             Departure: {{ flight.departureTime | date:'dd MMM yyyy, hh:mm a' }}
           </h6>
+           <h6>
+            Available Seats: {{ flight.availableSeats }}
+          </h6>
 
           <button
             class="btn btn-primary"

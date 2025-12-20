@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Ticket } from '../../models/Ticket';
 
 @Injectable({
@@ -8,32 +9,69 @@ import { Ticket } from '../../models/Ticket';
 })
 export class TicketService {
 
+  private baseUrl = 'http://localhost:8765/ticket-service/ticket';
 
   constructor(private http: HttpClient) {}
-//later add that ticket as path variable dont forget
+
+  // Get tickets by email
   getTicketsByEmail(email: string): Observable<Ticket[]> {
-    return this.http.get<any[]>(`http://localhost:8765/ticket-service/ticket/getTicketsByEmail/${email}`
-      ,{withCredentials:true}
-    );
+    return this.http
+      .get<Ticket[]>(`${this.baseUrl}/getTicketsByEmail/${email}`, {
+        withCredentials: true,
+      })
+      .pipe(catchError(this.handleError));
   }
+
+  // Cancel ticket
+  cancelTicket(id: number): Observable<string> {
+    return this.http
+      .delete(`${this.baseUrl}/cancel/${id}`, {
+        withCredentials: true,
+        responseType: 'text',
+      })
+      .pipe(catchError(this.handleError));
+  }
+
+  // Book ticket
   bookTicketByPassengerIdandFlightId(
-  flightId: number,
-  passengerId: number,
-  seatNo: string
-) {
-  const payload = {
-    flightId: flightId,
-    passengerId: passengerId,
-    seatNo: seatNo
-  };
-  console.log('Book Ticket Payload:', payload);
-return this.http.post(
-  'http://localhost:8765/ticket-service/ticket/book',
-  payload,
-  {
-    withCredentials: true,
-    responseType: 'text'
+    flightId: number,
+    passengerId: number,
+    numberOfSeats: number
+  ): Observable<string> {
+
+    const payload = {
+      flightId,
+      passengerId,
+      numberOfSeats,
+    };
+
+    console.log('Book Ticket Payload:', payload);
+
+    return this.http
+      .post(`${this.baseUrl}/book`, payload, {
+        withCredentials: true,
+        responseType: 'text',
+      })
+      .pipe(catchError(this.handleError));
   }
-);
-}
+
+  private handleError(error: HttpErrorResponse) {
+    let message = 'Something went wrong. Please try again later.';
+
+    if (error.status === 0) {
+    
+      message = 'Unable to connect to server.';
+    } else if (error.status === 401) {
+      message = 'Unauthorized. Please login again.';
+    } else if (error.status === 403) {
+      message = 'Access denied.';
+    } else if (error.status === 404) {
+      message = 'Requested resource not found.';
+    } else if (error.error) {
+      message = error.error;
+    }
+
+    console.error('HTTP Error:', error);
+    return throwError(() => message);
+  }
 }

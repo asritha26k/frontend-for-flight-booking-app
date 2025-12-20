@@ -31,7 +31,7 @@ export class TicketBooking implements OnInit {
   ticketBookedMessage$ = new Subject<string>();
 
   flightId!: number;
-  seatNo!: string;
+  numberOfSeats!: number;
 
   constructor(
     private readonly ticketService: TicketService,
@@ -65,9 +65,12 @@ export class TicketBooking implements OnInit {
       )
     );
   }
+  onTicketCancelled() {
+  this.refresh$.next();
+}
 
   bookTicket() {
-    if (!this.seatNo) return;
+    if (!this.numberOfSeats) return;
 
     this.authService.currentUser.pipe(
       take(1),
@@ -81,14 +84,14 @@ export class TicketBooking implements OnInit {
         this.ticketService.bookTicketByPassengerIdandFlightId(
           this.flightId,
           passengerId,
-          this.seatNo
+          this.numberOfSeats
         )
       )
     ).subscribe({
       next: () => {
         this.searchingState.clear();
         this.ticketBookedMessage$.next('Ticket booking successful');
-        this.seatNo = '';
+        this.numberOfSeats = 0;
         this.refresh$.next();
       },
       error: err => {
