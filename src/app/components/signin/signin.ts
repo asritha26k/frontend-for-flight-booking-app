@@ -62,21 +62,19 @@ form = new FormGroup({
 
   )
 });  
-  submit(){
-    this.user.username=this.form.value.username!;
-    this.user.password=this.form.value.password!;
-  this.auth.signin(this.user).subscribe({
-next:()=>{console.log('Signin succesful');
-  this.router.navigate(['/']);
-},
-error:(err)=>{
-  console.error('Sign in failed:',err.message);
- // this.router.navigate(['/signup'])
 
+submit() {
+  this.user.username = this.form.value.username!;
+  this.user.password = this.form.value.password!;
+
+  this.auth.signin(this.user).subscribe({
+    next: (res) => {
+      const result = this.auth.handleSignInResponse(res);
+      this.router.navigate([result.redirect]);
+    }
+  });
 }
-  }
-  );
-}
+
 }
 
 

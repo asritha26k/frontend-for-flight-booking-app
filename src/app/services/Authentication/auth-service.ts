@@ -6,6 +6,7 @@ import { BehaviorSubject, catchError, throwError,of } from 'rxjs';
 import { UserRole } from '../../enums/user-role.enum';
 import { UserResponse } from '../../models/UserResponse';
 import { tap } from 'rxjs';
+import { SignInResponse } from '../../models/SignInResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +35,17 @@ export class AuthService {
   get currentUser() {
     return this.me$.asObservable(); //we are sending it as observable to avoid mutations like an getter we can think
   }
+setAuthenticatedUser(user: UserResponse) {
+  this.me$.next(user);
+}
+handleSignInResponse(res: SignInResponse) {
+  if ('forcePasswordChange' in res) {
+    return { redirect: '/change-password' };
+  }
 
+  this.me$.next(res);
+  return { redirect: '/' };
+}
   signup(user: userDetails) {
     const payload = {
       ...user,
@@ -48,18 +59,18 @@ export class AuthService {
       .pipe(catchError(error => this.handleError(error)));
   }
 
-  signin(user: user) {
-    return this.http
-      .post<UserResponse>(
-        `${this.BASE_URL}/signin`,
-        user,
-        { withCredentials: true }
-      )
-      .pipe(
-        tap(res => this.me$.next(res)),
-        catchError(error => this.handleError(error))
-      );
-  }
+ signin(user: user) {
+  return this.http
+    .post<SignInResponse>(
+      `${this.BASE_URL}/signin`,
+      user,
+      { withCredentials: true }
+    )
+    .pipe(
+     catchError(error => this.handleError(error))
+    );
+}
+
 
   signout() {
     return this.http
