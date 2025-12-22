@@ -5,19 +5,19 @@
     <div class="form-group ">
       <label for="airline">Airline</label>
       <div class="position-relative">
-      <input
-        type="text"
+      <select
         class="form-control"
         id="airline"
         formControlName="airline"
-        placeholder="Enter airline here"
-      />
+      >
+        @for(airline of airlines; track airline) {
+          <option [value]="airline">{{ airline }}</option>
+        }
+      </select>
     </div>
     <div class="position-absolute">
       @if(form.get('airline')?.invalid && form.get('airline')?.dirty){
-        @if(form.get('airline')?.errors?.['pattern']){
-          <small class="text-danger" style="font-size: 12px;">*Only alphabets are allowed</small>
-        }
+        <small class="text-danger" style="font-size: 12px;">*Please select an airline</small>
       }
     </div>
     </div>
