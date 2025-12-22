@@ -1,4 +1,94 @@
-ul {
-  list-style: none;
-  padding-left: 0;
+:root {
+  --navbar-height: 56px;
+}
+
+/* NAVBAR */
+.navbar {
+  height: var(--navbar-height);
+  z-index: 1100;
+}
+
+/* MAIN CONTENT */
+.content {
+  margin-top: var(--navbar-height);
+  padding: 2rem;
+}
+
+
+body {
+  overflow-x: hidden;
+}
+
+/* Overlay container */
+.overlay-sidebar {
+  position: fixed;
+  top: 56px;
+  left: 0;
+  height: calc(100vh - 56px);
+  width: 100%;
+  z-index: 1040;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Backdrop when sidebar is shown */
+.overlay-sidebar.show {
+  pointer-events: auto;
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Actual sidebar */
+.sidebar {
+  width: 280px;
+  height: 100%;
+  background: #ffffff;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  position: relative;
+}
+
+/* SHOW STATE */
+.overlay-sidebar.show .sidebar {
+  transform: translateX(0);
+}
+
+/* Sidebar link styling */
+.sidebar .nav-link {
+  color: #333;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.sidebar .nav-link:hover {
+  background: #f0f0f0;
+  color: #0d6efd;
+  transform: translateX(5px);
+}
+
+.sidebar .nav-link .material-symbols-outlined {
+  font-size: 20px;
+}
+
+/* Logout button in sidebar */
+.sidebar .btn-outline-danger {
+  border-color: #dc3545;
+  color: #dc3545;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.sidebar .btn-outline-danger:hover {
+  background: #dc3545;
+  border-color: #dc3545;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
 }

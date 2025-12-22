@@ -1,76 +1,96 @@
+<!-- NAVBAR -->
+<nav class="navbar bg-light shadow-sm fixed-top px-4 d-flex align-items-center">
 
+  <!-- MENU BUTTON (ONLY AFTER LOGIN) -->
+  @if (currentUser$ | async) {
+    <button
+      class="btn btn-primary me-3"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#sideMenu"
+    >
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+  }
 
- <nav class="navbar navbar-expand-lg navbar-light bg-light px-4 shadow-sm fixed-top">
-  
-  <div class="d-flex gap-2 align-items-center">
-    <span class="material-symbols-outlined text-white">flight_takeoff</span>
-    <a class="navbar-brand fw-bold text-white" routerLink="/">Asritha flights</a>
+  <!-- CENTER TITLE -->
+  <div class="position-absolute start-50 translate-middle-x fw-bold fs-5 text-white">
+    ✈️ Asian Flights
   </div>
 
-  <div class="collapse navbar-collapse">
-    <ul class="navbar-nav ms-auto align-items-center gap-3">
+  <!-- RIGHT SIDE -->
+  <div class="ms-auto d-flex align-items-center gap-2">
 
-      <li class="nav-item">
-        <a class="nav-link fw-semibold d-flex align-items-center gap-2" routerLink="/">
-          <span class="material-symbols-outlined">home</span>
-          <span>Home</span>
-        </a>
-      </li>
+    @if (currentUser$ | async) {
+      <!-- AFTER LOGIN -->
+      <a class="btn btn-primary" routerLink="/profile">Profile</a>
+    } @else {
+      <!-- BEFORE LOGIN -->
+      <a class="btn btn-primary" routerLink="/">Home</a>
+      <a class="btn btn-primary" routerLink="/signin">Sign in</a>
+    }
 
-      @if (currentUser$ | async; as user) {
+  </div>
 
+</nav>
+
+<!-- SIDEBAR (ONLY AFTER LOGIN) -->
+@if (currentUser$ | async) {
+  <div class="collapse overlay-sidebar" id="sideMenu">
+    <div class="sidebar shadow">
+
+      <ul class="list-unstyled d-flex flex-column gap-3 h-100 p-3">
+
+        <!-- HOME -->
+        <li>
+          <a class="nav-link d-flex align-items-center gap-2" routerLink="/">
+            <span class="material-symbols-outlined">home</span>
+            Home
+          </a>
+        </li>
+
+        <!-- ADMIN -->
         @if ((user$ | async) === 'admin') {
-          <li class="nav-item">
-            <button class="btn btn-primary" (click)="flightsAddPage()">
-              Flights Inventory
-            </button>
-          </li>
-        } @else {
-          <li class="nav-item">
-            <span class="badge bg-secondary fs-6 px-3 py-2">
-              Hi, {{ user.username }}
-            </span>
-          </li>
-
-          <li class="nav-item">
-            <button class="btn btn-primary" (click)="seeProfile()">Profile</button>
-          </li>
-
-          <li class="nav-item">
-            <button class="btn btn-primary" (click)="seeTickets()">Tickets Booked</button>
+          <li>
+            <a class="nav-link d-flex align-items-center gap-2" routerLink="/addFlights">
+              <span class="material-symbols-outlined">flight</span>
+              Flight Inventory
+            </a>
           </li>
         }
 
-       
-         <li class="nav-item">
-          <button class="btn btn-primary" (click)="changePassword()">Change Password</button>
-        </li>
-         <li class="nav-item">
-          <button class="btn btn-danger" (click)="logout()">Logout</button>
+        <!-- USER -->
+        @if ((user$ | async) !== 'admin') {
+          <li>
+            <a class="nav-link d-flex align-items-center gap-2" routerLink="/tickets">
+              <span class="material-symbols-outlined">confirmation_number</span>
+              Bookings
+            </a>
+          </li>
+        }
+
+        <!-- CHANGE PASSWORD -->
+        <li>
+          <a class="nav-link d-flex align-items-center gap-2" routerLink="/change-password">
+            <span class="material-symbols-outlined">lock</span>
+            Change Password
+          </a>
         </li>
 
-      } @else {
-        <li class="nav-item">
-          <a class="btn btn-primary" routerLink="/signin">Sign in</a>
+        <!-- LOGOUT -->
+        <li class="mt-auto">
+          <button class="btn btn-outline-danger w-100" (click)="logout()">
+            Logout
+          </button>
         </li>
 
-        <li class="nav-item">
-          <a class="btn btn-primary" routerLink="/signup">Sign up</a>
-        </li>
-      }
+      </ul>
 
-    </ul>
+    </div>
   </div>
-</nav> 
+}
 
-<router-outlet></router-outlet>
-<div class="collapse" id="navbarToggleExternalContent">
-  <div class="bg-body-tertiary shadow-3 p-4">
-    <button data-mdb-button-init data-mdb-ripple-init
-      class="btn btn-link btn-block border-bottom m-0">Link 1</button>
-    <button data-mdb-button-init data-mdb-ripple-init
-      class="btn btn-link btn-block border-bottom m-0">Link 2</button>
-    <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-block m-0">Link
-      3</button>
-  </div>
-</div> 
+<!-- MAIN CONTENT -->
+<div class="content pt-5">
+  <router-outlet></router-outlet>
+</div>
