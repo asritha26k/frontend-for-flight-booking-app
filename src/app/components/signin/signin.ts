@@ -27,6 +27,7 @@ export class Signin {
     error$!: Observable<string | null>;
     
   signedin$!:Observable<string | null>;
+  passwordChanged$!:Observable<string | null>;
 ngOnInit() {
   this.auth.clearError();
    this.error$ = this.auth.error$.pipe(
@@ -43,6 +44,17 @@ ngOnInit() {
     map(params => params.get('signedin')),
     filter(value => value === 'success'),  
     switchMap(value =>//timer is an observable that emits after 3sec, switchmap is the one which subscribes to it
+      timer(3000).pipe(
+        map(() => null),                    
+        startWith(value)               
+      )
+    )
+  );
+
+  this.passwordChanged$ = this.route.queryParamMap.pipe(
+    map(params => params.get('passwordChanged')),
+    filter(value => value === 'success'),  
+    switchMap(value =>
       timer(3000).pipe(
         map(() => null),                    
         startWith(value)               
@@ -69,8 +81,9 @@ submit() {
 
   this.auth.signin(this.user).subscribe({
     next: (res) => {
+      console.log(res,"this is the result after sign in ");
       const result = this.auth.handleSignInResponse(res);
-      this.router.navigate([result.redirect]);
+      //this.router.navigate([result.redirect]);
     }
   });
 }

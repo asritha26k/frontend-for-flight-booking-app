@@ -9,6 +9,11 @@
     Signed up successfully
   </div>
 }
+@if ((passwordChanged$ | async) === 'success') {
+  <div class="alert alert-success mb-2 my-3">
+    Password changed successfully
+  </div>
+}
 </div>
 <div class="d-flex  justify-content-center align-items-center min-vh-100">
 <form [formGroup]="form" class="card p-4 shadow-sm" (ngSubmit)="submit()">
