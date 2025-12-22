@@ -46,7 +46,7 @@ export class ChangePassword {
         // Ensure session is cleared on server and client
         this.auth.signout().subscribe({
           next: () => {
-            alert("Password changed successfully!");
+            // alert("Password changed successfully!");
             this.router.navigate(['/signin'], { queryParams: { passwordChanged: 'success' } });
           }
         });
