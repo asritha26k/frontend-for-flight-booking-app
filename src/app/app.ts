@@ -41,22 +41,30 @@ export class App implements OnInit {
   logout() {
     this.authService.signout().subscribe({
       next: () => {
+        this.closeSidebar();
         this.router.navigate(['/']).then(() => window.location.reload());
       }
     });
   }
+  sidebarOpen = false;
+
+toggleSidebar() {
+  this.sidebarOpen = !this.sidebarOpen;
+}
+
+closeSidebar() {
+  this.sidebarOpen = false;
+}
+
+
 
   flightsAddPage() {
     this.router.navigate(['/addFlights']);
   }
 
-  seeProfile() {
-    this.router.navigate(['/register']);
-  }
+  
 
-  seeTickets() {
-    this.router.navigate(['/tickets']);
-  }
+ 
   changePassword(){
     this.router.navigate(['/change-password']);
   }
