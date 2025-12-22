@@ -1,39 +1,55 @@
 @if (flights && flights.length > 0) {
 
-  <div class="d-flex justify-content-center align-items-center
-   gap-3 mt-5 flex-wrap w-100">
+  <div class="row m-5 g-4">
+
     @for (flight of flights; track flight.flightId) {
 
-      <div class="card w-100">
-        <div id=flight class="card-body m-3 rounded d-flex flex-row justify-content-between">
+      <div class="col-md-6">
+        <div class="ticket-card">
 
-          <h5>{{ flight.airline }}</h5>
+          <!-- Header -->
+          <div class="ticket-header">
+            <h5 class="mb-0">{{ flight.airline }}</h5>
+            <span class="price">
+              {{ flight.price | currency:'INR' }}
+            </span>
+          </div>
 
-          <h5 class="text-muted">
-            {{ flight.origin }} → {{ flight.destination }}
-          </h5>
+          <!-- Route -->
+          <div class="ticket-route">
+            <span>{{ flight.origin }}</span>
+            <span class="arrow">✈</span>
+            <span>{{ flight.destination }}</span>
+          </div>
 
-          <span id=price class="badge text-bg-success h-75 fs-6">
-            {{ flight.price | currency:'INR' }}
-          </span>
+          <div class="ticket-divider"></div>
 
-          <h6>
-            Arrival: {{ flight.arrivalTime | date:'dd MMM yyyy, hh:mm a' }}
-          </h6>
+          <!-- Timing -->
+          <div class="ticket-details">
+            <div>
+              <small>Departure</small>
+              <p>{{ flight.departureTime | date:'dd MMM yyyy, hh:mm a' }}</p>
+            </div>
 
-          <h6>
-            Departure: {{ flight.departureTime | date:'dd MMM yyyy, hh:mm a' }}
-          </h6>
-           <h6>
-            Available Seats: {{ flight.availableSeats }}
-          </h6>
+            <div>
+              <small>Arrival</small>
+              <p>{{ flight.arrivalTime | date:'dd MMM yyyy, hh:mm a' }}</p>
+            </div>
+          </div>
 
-          <button
-            class="btn btn-primary"
-            (click)="SendFlightId(flight)"
-          >
-            Book Ticket
-          </button>
+          <!-- Footer -->
+          <div class="ticket-footer">
+            <span class="seats">
+              Seats: {{ flight.availableSeats }}
+            </span>
+
+            <button
+              class="btn btn-primary btn-sm"
+              (click)="SendFlightId(flight)"
+            >
+              Book Ticket
+            </button>
+          </div>
 
         </div>
       </div>
@@ -43,6 +59,8 @@
 
 } @else {
   <div class="d-flex justify-content-center">
-  <p class="text-center mt-5 text-muted card w-50 ">No flights found!!</p>
+    <p class="text-center mt-5 text-muted card w-50 p-3">
+      No flights found!!
+    </p>
   </div>
 }

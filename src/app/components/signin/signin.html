@@ -1,63 +1,99 @@
-<div class="d-flex justify-content-center align-items-center w-100 mt-5">
-@if (error$ | async; as error) {
-  <div class="alert alert-danger mb-2 my-3">
-   {{ error.replace('Error: ', '') }}
-  </div>
-}
-@if ((signedin$ | async) === 'success') {
-  <div class="alert alert-success mb-2 my-3">
-    Signed up successfully
-  </div>
-}
-</div>
-<div class="d-flex  justify-content-center align-items-center min-vh-100">
-<form [formGroup]="form" class="card p-4 shadow-sm" (ngSubmit)="submit()">
-  <div class="my-2">
-    <div class="my-2"><h3 class="text-center">Sign in</h3></div>
+        <div class="d-flex justify-content-center align-items-center w-100 mt-5">
+        @if (error$ | async; as error) {
+          <div class="alert alert-danger mb-2 my-3">
+          {{ error.replace('Error: ', '') }}
+          </div>
+        }
+        @if ((signedin$ | async) === 'success') {
+          <div class="alert alert-success mb-2 my-3">
+            Signed up successfully
+          </div>
+        }
+        @if ((passwordChanged$ | async) === 'success') {
+          <div class="alert alert-success mb-2 my-3">
+            Password changed successfully
+          </div>
+        }
+        </div>
+        <div class="d-flex  justify-content-center align-items-center min-vh-100">
+        <form [formGroup]="form" class="card p-4 shadow-sm" (ngSubmit)="submit()">
+          <div class="my-2">
+            <div class="my-2"><h3 class="text-center">Sign in</h3></div>
 
-    <div class="form-group my-3 position-relative">
-    <label class="my-1" for="exampleInputUsername">Username</label>
-    <input     formControlName="username"     placeholder="Enter your username"   class="form-control" id="exampleInputUsername" >
-    <div class="position-absolute">
-@if(form.get('username')?.invalid && form.get('username')?.dirty){
-  @if(form.get('username')?.errors?.['mustStartWithLetter']){
-    <small class="text-danger">*starting letter must be alphabet</small>
-   }
-   @if(form.get('username')?.errors?.['invalidChars']){
-    <small class="text-danger">*Only letters, numbers, _ allowed</small>
-   }
-  @if(form.get('username')?.errors?.['minLength']){
-    <small class="text-danger">*Minimum 5 characters</small>
-  }
-   @if(form.get('username')?.errors?.['noSpaces']){
-    <small class="text-danger">*Spaces not allowed</small>
-   }
-}
-</div>
+            <div class="form-group my-3 position-relative">
+            <label class="my-1" for="exampleInputUsername">Username</label>
+            <input     formControlName="username"     placeholder="Enter your username"   class="form-control" id="exampleInputUsername" >
+            <div class="position-absolute">
+        @if(form.get('username')?.invalid && form.get('username')?.dirty){
+          @if(form.get('username')?.errors?.['mustStartWithLetter']){
+            <small class="text-danger">*starting letter must be alphabet</small>
+          }
+          @if(form.get('username')?.errors?.['invalidChars']){
+            <small class="text-danger">*Only letters, numbers, _ allowed</small>
+          }
+          @if(form.get('username')?.errors?.['minLength']){
+            <small class="text-danger">*Minimum 5 characters</small>
+          }
+          @if(form.get('username')?.errors?.['noSpaces']){
+            <small class="text-danger">*Spaces not allowed</small>
+          }
+        }
+        </div>
+          </div>
+          <div class="form-group position-relative">
+            <label class="my-1" for="exampleInputPassword1">Password</label>
+            <input formControlName="password" placeholder="Enter your password"   type="password" class="form-control" id="exampleInputPassword1">
+            <div class="position-fixed">
+            @if(form.get('password')?.invalid && form.get('password')?.dirty){
+            @if(form.get('password')?.errors?.['minLength']){
+              <small class="text-danger">*Minimum 6 characters</small>
+            }@if(form.get('password')?.errors?.['noSpaces']){
+              <small class="text-danger">*Spaces not allowed</small>
+            }
+        }
+        </div>
+          </div>
+        </div>
+          <button  [disabled]="form.invalid" type="submit" class="btn btn-primary my-4">Submit</button>
+        <div class="text-center mt-3">
+          <span class="text-muted">Don't have an account?</span>
+          <a
+            routerLink="/signup"
+            class="ms-1 fw-semibold text-decoration-none"
+          >
+            Sign up
+          </a>
+        </div>
+        </form>
+        </div>
+
+        @if(passwordExpired$ | async) {
+        <div
+  class="modal fade show auth-modal"
+  tabindex="-1"
+  style="display: block; background: rgba(0,0,0,.5)"
+>
+<div class="modal-dialog modal-dialog-centered" style="max-width: 380px;">
+  <div class="modal-content p-3 rounded-4">
+
+    <button
+      type="button"
+      class="btn-close ms-auto"
+      aria-label="Close"
+      (click)="onCloseModal()">
+    </button>
+
+    <h6 class="text-center fw-semibold mb-3">
+      Change Password
+    </h6>
+
+    <app-change-password
+      (passwordUpdated)="onPasswordUpdated()">
+    </app-change-password>
+
   </div>
-  <div class="form-group position-relative">
-    <label class="my-1" for="exampleInputPassword1">Password</label>
-    <input formControlName="password" placeholder="Enter your password"   type="password" class="form-control" id="exampleInputPassword1">
-    <div class="position-fixed">
-    @if(form.get('password')?.invalid && form.get('password')?.dirty){
-     @if(form.get('password')?.errors?.['minLength']){
-       <small class="text-danger">*Minimum 6 characters</small>
-     }@if(form.get('password')?.errors?.['noSpaces']){
-       <small class="text-danger">*Spaces not allowed</small>
-     }
+</div>
+
+
+</div>
 }
-</div>
-  </div>
-</div>
-  <button  [disabled]="form.invalid" type="submit" class="btn btn-primary my-4">Submit</button>
-<div class="text-center mt-3">
-  <span class="text-muted">Don't have an account?</span>
-  <a
-    routerLink="/signup"
-    class="ms-1 fw-semibold text-decoration-none"
-  >
-    Sign up
-  </a>
-</div>
-</form>
-</div>

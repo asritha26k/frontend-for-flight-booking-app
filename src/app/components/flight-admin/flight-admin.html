@@ -1,196 +1,159 @@
-<p>You can add flights here</p>
-<div class="d-flex justify-content-center align-items-center gap-3">
-  <form class="card my-5 p-4" [formGroup]="form" (ngSubmit)="register()">
-    <div class="d-flex flex-column gap-3">
-    <div class="form-group ">
-      <label for="airline">Airline</label>
-      <div class="position-relative">
-      <input
-        type="text"
-        class="form-control"
-        id="airline"
-        formControlName="airline"
-        placeholder="Enter airline here"
-      />
-    </div>
-    <div class="position-absolute">
-      @if(form.get('airline')?.invalid && form.get('airline')?.dirty){
-        @if(form.get('airline')?.errors?.['pattern']){
-          <small class="text-danger" style="font-size: 12px;">*Only alphabets are allowed</small>
-        }
-      }
-    </div>
-    </div>
-    <div class="form-group">
-      <label for="origin">Origin</label>
-      <div class="position-relative">
-      
-      <input
-        type="text"
-        id="origin"
-        class="form-control"
-        formControlName="origin"
-        placeholder="Enter origin here"
-      />
-    
-    <div class="position-absolute">
-      @if(form.get('origin')?.invalid && form.get('origin')?.dirty){
-        @if(form.get('origin')?.errors?.['pattern']){
-          <small class="text-danger" style="font-size: 12px;">*Only alphabets are allowed</small>
-        }
-      }
-    </div>
-    </div>
-    </div>
-    <div class="form-group">
-      <label for="destination">Destination</label>
-      <div class="position-relative">
-      <input
-        type="text"
-        id="destination"
-        class="form-control"
-        formControlName="destination"
-        placeholder="Enter destination here"
-      />
-      <div class="position-absolute">
-      @if(form.get('destination')?.invalid && form.get('destination')?.dirty){
-        @if(form.get('destination')?.errors?.['pattern']){
-          <small class="text-danger" style="font-size: 12px;">*Only alphabets are allowed</small>
-        }
-      }
-    </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="price">Price</label>
-      <div>
-      <input
-        type="text"
-        id="price"
-        class="form-control"
-        formControlName="price"
-        placeholder="Enter price here"
-      />
-      <div class="position-absolute">
-      @if(form.get('price')?.invalid && form.get('price')?.dirty){
-        @if(form.get('price')?.errors?.['pattern']){
-          <small class="text-danger" style="font-size: 12px;">*Only numbers are allowed</small>
-        }
-      }
-    </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="departureTime">Departure Date Time</label>
-      <div class="d-flex flex-row gap-3">
-        <input
-          id="departureDate"
-          type="date"
-          [min]="minDate"
-          class="form-control"
-          formControlName="departureDate"
-          placeholder="Enter departure date here"
-        />
-        <input
-          id="departureTime"
-          type="time"
-          step="300"
-          class="form-control"
-          formControlName="departureTime"
-          placeholder="Enter departure time here"
-        />
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="arrivalTime">Arrival Date Time</label>
-      <div class="d-flex flex-row gap-3">
-        <input
-          id="arrivalDate"
-          [min]="form.value.departureDate || minDate"
-          type="date"
-          class="form-control"
-          formControlName="arrivalDate"
-          placeholder="Enter arrival date here"
-        />
-        <input
-          id="arrivalTime"
-          type="time"
-          step="300"
-          class="form-control"
-          formControlName="arrivalTime"
-          placeholder="Enter arrival time here"
-        />
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="totalSeats">Total Seats</label>
-      <div class="d-flex flex-row gap-3">
-        <input
-          id="totalSeats"
+<div class="container my-5">
+  <div class="text-center mb-4">
+    <h3 class="fw-bold">✈️ Add New Flight</h3>
+    <p class="text-muted">Fill in the details to add a new flight</p>
+  </div>
 
-          class="form-control"
-          formControlName="totalSeats"
-          placeholder="Enter totalSeats"
-        />
+  <div class="d-flex justify-content-center">
+    <form class="card shadow-lg p-4 w-100" style="max-width: 700px"
+          [formGroup]="form" (ngSubmit)="register()">
+
+      <div class="row g-3">
+
+        <!-- Airline -->
+        <div class="col-md-6">
+          <label class="form-label">Airline</label>
+          <select class="form-control" formControlName="airline">
+            @for(airline of airlines; track airline) {
+              <option [value]="airline">{{ airline }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Price -->
+        <div class="col-md-6">
+          <label class="form-label">Price (₹)</label>
+          <input class="form-control" formControlName="price" placeholder="Eg: 4500">
+        </div>
+
+        <!-- Origin -->
+        <div class="col-md-6">
+          <label class="form-label">Origin</label>
+          <input class="form-control" formControlName="origin" placeholder="Eg: Hyderabad">
+        </div>
+
+        <!-- Destination -->
+        <div class="col-md-6">
+          <label class="form-label">Destination</label>
+          <input class="form-control" formControlName="destination" placeholder="Eg: Delhi">
+        </div>
+
+        <!-- Departure -->
+        <div class="col-md-6">
+          <label class="form-label">Departure</label>
+          <div class="d-flex gap-2">
+            <input type="date" class="form-control" [min]="minDate" formControlName="departureDate">
+            <input type="time" class="form-control" step="300" formControlName="departureTime">
+          </div>
+        </div>
+
+        <!-- Arrival -->
+        <div class="col-md-6">
+          <label class="form-label">Arrival</label>
+          <div class="d-flex gap-2">
+            <input type="date" class="form-control"
+                   [min]="form.value.departureDate || minDate"
+                   formControlName="arrivalDate">
+            <input type="time" class="form-control" step="300" formControlName="arrivalTime">
+          </div>
+        </div>
+
+        <!-- Seats -->
+        <div class="col-md-6">
+          <label class="form-label">Total Seats</label>
+          <input class="form-control" formControlName="totalSeats" placeholder="Eg: 180">
+        </div>
+
       </div>
-    </div>
-    <button type="submit" class="btn btn-primary my-3" [disabled]="form.invalid">Add flight</button>
-    </div>
-  </form>
+
+      <button class="btn btn-primary w-100 mt-4"
+              [disabled]="form.invalid">
+        ➕ Add Flight
+      </button>
+    </form>
+  </div>
 </div>
-
 @if (flights$ | async; as flights) {
 
   @if (flights.length > 0) {
 
-    <div class="d-flex justify-content-center align-items-center gap-3 mt-5 flex-wrap w-100">
-      @for (flight of flights; track flight.flightId) {
+    <div class="container mt-5">
+      <div class="row g-4">
 
-        <div class="card w-100">
-          <div class="card-body m-3 rounded d-flex flex-row justify-content-between">
+        @for (flight of flights; track flight.flightId) {
 
-            <h5>{{ flight.airline }}</h5>
+          <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+              <div class="card-body">
 
-            <h5 class="text-muted">
-              {{ flight.origin }} → {{ flight.destination }}
-            </h5>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5 class="fw-bold">{{ flight.airline }}</h5>
+                  <span class="badge bg-success fs-6">
+                    {{ flight.price | currency:'INR' }}
+                  </span>
+                </div>
 
-            <span class="badge text-bg-success h-75 fs-6">
-              {{ flight.price | currency:'INR' }}
-            </span>
+                <h6 class="text-muted mb-3">
+                  {{ flight.origin }} ✈️ {{ flight.destination }}
+                </h6>
 
-            <h6>
-              Arrival:
-              {{ flight.arrivalTime | date:'dd MMM yyyy, hh:mm a' }}
-            </h6>
+                <div class="row small text-muted">
+                  <div class="col-6">
+                    <strong>Departure</strong><br>
+                    {{ flight.departureTime | date:'dd MMM yyyy, hh:mm a' }}
+                  </div>
+                  <div class="col-6">
+                    <strong>Arrival</strong><br>
+                    {{ flight.arrivalTime | date:'dd MMM yyyy, hh:mm a' }}
+                  </div>
+                </div>
 
-            <h6>
-              Departure:
-              {{ flight.departureTime | date:'dd MMM yyyy, hh:mm a' }}
-            </h6>
-             <h6>
-              Departure:
-              {{ flight.availableSeats}}
-            </h6>
-           
+                <hr>
 
-            <button class="btn btn-danger"
-              (click)="DeleteById(flight.flightId)">
-              Delete
-            </button>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="badge bg-info">
+                    Seats: {{ flight.availableSeats }}
+                  </span>
 
+                  <button class="btn btn-outline-danger btn-sm"
+                          data-bs-toggle="modal"
+                          data-bs-target="#deleteModal"
+                          (click)="selectedFlightId = flight.flightId">
+                    🗑 Delete
+                  </button>
+                </div>
+
+              </div>
+            </div>
           </div>
-        </div>
 
-      }
+        }
+      </div>
     </div>
 
   } @else {
-    <div class="d-flex justify-content-center">
-      <p class="text-center mt-5 text-muted card w-50">
-        No flights found!!
-      </p>
-    </div>
+    <p class="text-center text-muted mt-5">No flights found ✈️</p>
   }
-
 }
+<div class="modal fade" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Deletion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Do you really want to delete this flight?</p>
+        <p class="text-muted small">This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger"
+                data-bs-dismiss="modal"
+                (click)="confirmDelete()">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

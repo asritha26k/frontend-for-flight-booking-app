@@ -1,0 +1,79 @@
+.ticket-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 18px 22px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ticket-header h5 {
+  font-weight: 600;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status-badge.booked {
+  background: #198754;
+  color: #fff;
+}
+
+.status-badge.cancelled {
+  background: #dc3545;
+  color: #fff;
+}
+
+.pnr {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.pnr span {
+  color: #000;
+  font-weight: 500;
+}
+
+.ticket-divider {
+  border-top: 2px dashed #ddd;
+  margin: 12px 0;
+}
+
+.ticket-details {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ticket-details small {
+  color: #6c757d;
+}
+
+.ticket-details p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.ticket-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.seats {
+  font-size: 0.9rem;
+  color: #555;
+}
