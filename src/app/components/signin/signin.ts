@@ -93,8 +93,13 @@ submit() {
   });
 }
 onPasswordUpdated() {
+  // Just hide modal. Navigation handled by ChangePassword after signout
   this.auth.setPasswordExpired(false);
-  this.router.navigate(['/']);
+}
+
+onCloseModal() {
+  this.auth.setPasswordExpired(false);
+  this.router.navigate(['/signin']);
 }
 }
 

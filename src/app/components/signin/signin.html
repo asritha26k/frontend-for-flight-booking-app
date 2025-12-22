@@ -69,18 +69,31 @@
 
         @if(passwordExpired$ | async) {
         <div
-  class="modal fade show"
+  class="modal fade show auth-modal"
   tabindex="-1"
   style="display: block; background: rgba(0,0,0,.5)"
 >
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-4">
-      <h5 class="mb-3 text-center">Change Password</h5>
+<div class="modal-dialog modal-dialog-centered" style="max-width: 380px;">
+  <div class="modal-content p-3 rounded-4">
 
-      <app-change-password
-        (passwordUpdated)="onPasswordUpdated()"
-      ></app-change-password>
-    </div>
+    <button
+      type="button"
+      class="btn-close ms-auto"
+      aria-label="Close"
+      (click)="onCloseModal()">
+    </button>
+
+    <h6 class="text-center fw-semibold mb-3">
+      Change Password
+    </h6>
+
+    <app-change-password
+      (passwordUpdated)="onPasswordUpdated()">
+    </app-change-password>
+
   </div>
+</div>
+
+
 </div>
 }

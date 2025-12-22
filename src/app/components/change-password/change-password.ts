@@ -40,7 +40,10 @@ export class ChangePassword {
   change() {
     this.auth.changePassword(this.form.value as any).subscribe({
       next: () => {
+        // Hide any password-expired modal and reset state
+        this.auth.setPasswordExpired(false);
         this.passwordUpdated.emit();
+        // Ensure session is cleared on server and client
         this.auth.signout().subscribe({
           next: () => {
             alert("Password changed successfully!");
