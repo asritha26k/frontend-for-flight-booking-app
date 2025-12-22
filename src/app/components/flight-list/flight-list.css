@@ -4,3 +4,74 @@
 #price{
     background-color: #607B8F !important;
 }
+.ticket-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ticket-header h5 {
+  font-weight: 600;
+}
+
+.price {
+  background: #607B8F;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.ticket-route {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin: 12px 0;
+}
+
+.ticket-route .arrow {
+  margin: 0 10px;
+}
+
+.ticket-divider {
+  border-top: 2px dashed #ddd;
+  margin: 10px 0;
+}
+
+.ticket-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.ticket-details small {
+  color: #6c757d;
+}
+
+.ticket-details p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.ticket-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.seats {
+  font-size: 0.9rem;
+  color: #555;
+}

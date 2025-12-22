@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { user } from '../../models/user';
 import { AuthService } from '../../services/Authentication/auth-service';
 import { FormControl, FormGroup,  ReactiveFormsModule, Validators } from '@angular/forms';
@@ -6,19 +6,21 @@ import { Route, Router } from '@angular/router';
 import { usernameValidator } from '../../validatorFunctions/usernameValidator';
 import { passwordValidator } from '../../validatorFunctions/passwordValidator';
 import { filter, map, Observable, of, startWith, switchMap, timer } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { ChangePassword } from "../change-password/change-password";
 
 @Component({
   selector: 'app-signin',
-  imports: [ReactiveFormsModule,AsyncPipe,RouterModule ],
+  imports: [ReactiveFormsModule, AsyncPipe, RouterModule, ChangePassword, CommonModule],
   standalone:true,
   templateUrl: './signin.html',
   styleUrls: ['./signin.css'],
 })
 
-export class Signin {
+export class Signin implements OnInit{
+  passwordExpired$!: Observable<boolean>;
  constructor(private readonly auth:AuthService,private readonly router:Router,private readonly route:ActivatedRoute){}
   user:user={
     username:"",
@@ -29,6 +31,8 @@ export class Signin {
   signedin$!:Observable<string | null>;
   passwordChanged$!:Observable<string | null>;
 ngOnInit() {
+
+  this.passwordExpired$ = this.auth.passwordExpiredState$;
   this.auth.clearError();
    this.error$ = this.auth.error$.pipe(
     filter(error => !!error), 
@@ -50,6 +54,7 @@ ngOnInit() {
       )
     )
   );
+  
 
   this.passwordChanged$ = this.route.queryParamMap.pipe(
     map(params => params.get('passwordChanged')),
@@ -87,7 +92,10 @@ submit() {
     }
   });
 }
-
+onPasswordUpdated() {
+  this.auth.setPasswordExpired(false);
+  this.router.navigate(['/']);
+}
 }
 
 

@@ -30,6 +30,9 @@ export class AuthService {
   private readonly me$ = new BehaviorSubject<UserResponse | null | undefined>(undefined);
   private readonly errorSubject = new BehaviorSubject<string | null>(null);
   error$ = this.errorSubject.asObservable();
+  private readonly passwordExpired$ = new BehaviorSubject<boolean>(false);
+passwordExpiredState$ = this.passwordExpired$.asObservable();
+
 
   constructor(private readonly http: HttpClient,private readonly router:Router) {
     this.loadMe();
@@ -51,16 +54,17 @@ setAuthenticatedUser(user: UserResponse) {
 }
 
 handleSignInResponse(res: SignInResponse): void {
-  console.log("handle sign in response reached");
-
   if (isPasswordExpired(res)) {
-    console.log("trying to route");
-    this.router.navigate(['/change-password']);
+    this.passwordExpired$.next(true);
     return;
   }
-  console.log("routing without loggin in");
-  this.me$.next(res); // TS now knows this is UserResponse
+
+  this.me$.next(res);
+  this.passwordExpired$.next(false);
   this.router.navigate(['/']);
+}
+setPasswordExpired(value: boolean) {
+  this.passwordExpired$.next(value);
 }
 
   signup(user: userDetails) {

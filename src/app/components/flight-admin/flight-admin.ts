@@ -16,6 +16,7 @@ export class FlightAdmin implements OnInit {
   minDate!: string;
   flights$!: Observable<Flight[]>;
   airlines = ['INDIGO', 'AIRINDIA', 'EMIRATES', 'SPICEJET'];
+  selectedFlightId: number | undefined;
 
   private refresh$ = new BehaviorSubject<void>(undefined);
 
@@ -96,5 +97,12 @@ const futureDateArrival = future.toISOString().split('T')[0];
       },
       error: () => console.log('error in deleting the flights')
     });
+  }
+
+  confirmDelete() {
+    if (this.selectedFlightId !== undefined) {
+      this.DeleteById(this.selectedFlightId);
+      this.selectedFlightId = undefined;
+    }
   }
 }
