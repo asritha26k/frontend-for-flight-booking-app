@@ -57,4 +57,7 @@ export class App implements OnInit {
   seeTickets() {
     this.router.navigate(['/tickets']);
   }
+  changePassword(){
+    this.router.navigate(['/change-password']);
+  }
 }
