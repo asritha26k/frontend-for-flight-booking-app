@@ -18,24 +18,51 @@
               <option [value]="airline">{{ airline }}</option>
             }
           </select>
+          @if(form.get('airline')?.invalid && form.get('airline')?.touched){
+            <small class="text-danger">*Airline is required</small>
+          }
         </div>
 
         <!-- Price -->
         <div class="col-md-6">
           <label class="form-label">Price (₹)</label>
           <input class="form-control" formControlName="price" placeholder="Eg: 4500">
+          @if(form.get('price')?.invalid && form.get('price')?.touched){
+            @if(form.get('price')?.errors?.['required']){
+              <small class="text-danger">*Price is required</small>
+            }
+            @if(form.get('price')?.errors?.['pattern']){
+              <small class="text-danger">*Only numbers allowed</small>
+            }
+          }
         </div>
 
         <!-- Origin -->
         <div class="col-md-6">
           <label class="form-label">Origin</label>
           <input class="form-control" formControlName="origin" placeholder="Eg: Hyderabad">
+          @if(form.get('origin')?.invalid && form.get('origin')?.touched){
+            @if(form.get('origin')?.errors?.['required']){
+              <small class="text-danger">*Origin is required</small>
+            }
+            @if(form.get('origin')?.errors?.['pattern']){
+              <small class="text-danger">*Only alphabets allowed</small>
+            }
+          }
         </div>
 
         <!-- Destination -->
         <div class="col-md-6">
           <label class="form-label">Destination</label>
           <input class="form-control" formControlName="destination" placeholder="Eg: Delhi">
+          @if(form.get('destination')?.invalid && form.get('destination')?.touched){
+            @if(form.get('destination')?.errors?.['required']){
+              <small class="text-danger">*Destination is required</small>
+            }
+            @if(form.get('destination')?.errors?.['pattern']){
+              <small class="text-danger">*Only alphabets allowed</small>
+            }
+          }
         </div>
 
         <!-- Departure -->
@@ -45,6 +72,9 @@
             <input type="date" class="form-control" [min]="minDate" formControlName="departureDate">
             <input type="time" class="form-control" step="300" formControlName="departureTime">
           </div>
+          @if((form.get('departureDate')?.invalid && form.get('departureDate')?.touched) || (form.get('departureTime')?.invalid && form.get('departureTime')?.touched)){
+            <small class="text-danger">*Departure date and time are required</small>
+          }
         </div>
 
         <!-- Arrival -->
@@ -56,12 +86,18 @@
                    formControlName="arrivalDate">
             <input type="time" class="form-control" step="300" formControlName="arrivalTime">
           </div>
+          @if((form.get('arrivalDate')?.invalid && form.get('arrivalDate')?.touched) || (form.get('arrivalTime')?.invalid && form.get('arrivalTime')?.touched)){
+            <small class="text-danger">*Arrival date and time are required</small>
+          }
         </div>
 
         <!-- Seats -->
         <div class="col-md-6">
           <label class="form-label">Total Seats</label>
           <input class="form-control" formControlName="totalSeats" placeholder="Eg: 180">
+          @if(form.get('totalSeats')?.invalid && form.get('totalSeats')?.touched){
+            <small class="text-danger">*Total seats is required</small>
+          }
         </div>
 
       </div>
