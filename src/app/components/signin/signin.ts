@@ -74,7 +74,7 @@ form = new FormGroup({
     usernameValidator
   ]),
   password:new FormControl('',[
-    Validators.required,passwordValidator
+    Validators.required
   ]
 
   )

@@ -4,6 +4,7 @@ import { AuthService } from '../../services/Authentication/auth-service';
 import { filter, map, Observable, startWith, switchMap, timer } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { passwordValidator } from '../../validatorFunctions/passwordValidator';
 
 @Component({
   selector: 'app-change-password',
@@ -34,7 +35,7 @@ export class ChangePassword {
 
   form = new FormGroup({
     oldPassword: new FormControl('', Validators.required),
-    newPassword: new FormControl('', Validators.required),
+    newPassword: new FormControl('', [Validators.required, passwordValidator]),
   });
 
   change() {
