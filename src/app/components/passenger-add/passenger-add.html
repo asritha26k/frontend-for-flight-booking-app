@@ -1,0 +1,21 @@
+<div class="text-center my-3">
+  <label>Number of Passengers</label>
+  <input type="number"
+         [(ngModel)]="count"
+         min="1"
+         class="form-control w-25 mx-auto" />
+</div>
+
+<div class="d-flex flex-wrap gap-3 justify-content-center">
+  <app-passenger-registration
+    *ngFor="let _ of passengers; let i = index"
+    [index]="i"
+    (passengerChange)="onPassengerChange(i, $event)">
+  </app-passenger-registration>
+</div>
+
+<div class="text-center my-4">
+  <button class="btn btn-success" (click)="registerAll()">
+    Register All Passengers
+  </button>
+</div>

@@ -1,12 +1,15 @@
 export interface Ticket {
-  id?: number;
-  name: string;
-  email: string;
+  id: number;
+  pnr: string;
   origin: string;
   destination: string;
-  pnr: string;
   departureTime: string;
   arrivalTime: string;
-  numberOfSeats:number;
-  booked?:true;
+  numberOfSeats: number;
+  booked: boolean;
+  passengers: {
+    name: string;
+    email: string;
+    phoneNum: string;
+  }[];
 }

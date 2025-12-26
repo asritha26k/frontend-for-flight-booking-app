@@ -1,93 +1,86 @@
-import { Component, Input, OnChanges, OnInit,OnDestroy, Output } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject, switchMap, take } from 'rxjs';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Ticket } from '../../models/Ticket';
 import { TicketService } from '../../services/TicketService/ticket-service';
 import { AuthService } from '../../services/Authentication/auth-service';
-import { AsyncPipe, DatePipe } from '@angular/common';
-import { SimpleChanges } from '@angular/core';
-import { EventEmitter } from '@angular/core';
-import { FlightService } from '../../services/FlightService/flight-service';
+import { take } from 'rxjs';
+
 @Component({
   selector: 'app-ticket-list',
   standalone: true,
+  imports: [CommonModule, DatePipe],
   templateUrl: './ticket-list.html',
   styleUrl: './ticket-list.css',
-  imports:[ AsyncPipe, DatePipe]
 })
-export class TicketList implements OnInit, OnChanges, OnDestroy {
+export class TicketList implements  OnInit, OnChanges{
 
-  selectedTicket!: Ticket;
+  @Input() tickets: Ticket[] = [];
+  @Output() ticketCancelled = new EventEmitter<number>();
 
-  @Input() tickets: Ticket[] | null = null;
-  @Output() ticketCancelled = new EventEmitter<void>();
-
-  tickets$!: Observable<Ticket[]>;
-  private refresh$ = new BehaviorSubject<void>(undefined);
+  displayedTickets: Ticket[] = [];
+  private selectedTicket?: Ticket;
 
   constructor(
-    private readonly ticketService: TicketService,
-    private readonly authService: AuthService
+    private ticketService: TicketService,
+    private authService: AuthService
   ) {}
-
-  ngOnInit() {
-    if (!this.tickets) {
-      this.tickets$ = this.authService.currentUser.pipe(
-        take(1),
-        switchMap(user => {
-          if (!user?.email) {
-            throw new Error('User not logged in');
-          }
-          return this.refresh$.pipe(
-            switchMap(() =>
-              this.ticketService.getTicketsByEmail(user.email)
-            )
-          );
-        })
-      );
-    }
+ngOnChanges(changes: SimpleChanges): void {
+  if (changes['tickets'] && this.tickets.length > 0) {
+    this.displayedTickets = this.tickets;
   }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['tickets'] && this.tickets) {
-      this.tickets$ = of(this.tickets);
-    }
-  }
-
-  openCancelModal(ticket: Ticket) {
-    this.selectedTicket = ticket;
-  }
-
-  confirmCancel() {
-    this.cancel(this.selectedTicket);
-  }
-
-  isCancelDisabled(ticket: Ticket): boolean {
-    const departure = new Date(ticket.departureTime).getTime();
-    const now = Date.now();
-    return (departure - now) / (1000 * 60 * 60) < 24;
-  }
-
-  cancel(ticket: Ticket) {
-    if (!ticket?.id || !ticket.departureTime) return;
-
-    const departure = new Date(ticket.departureTime).getTime();
-    const now = Date.now();
-    const diffInHours = (departure - now) / (1000 * 60 * 60);
-
-    if (diffInHours < 24) {
-      alert('Ticket cannot be cancelled within 24 hours of departure');
+}
+  ngOnInit(): void {
+    // Case 1: Parent passed tickets
+    if (this.tickets.length > 0) {
+      this.displayedTickets = this.tickets;
       return;
     }
 
-    this.ticketService.cancelTicket(ticket.id).subscribe({
-      next: () => {
-        this.refresh$.next();
-        this.ticketCancelled.emit();
+    // Case 2: No input → fetch by logged-in user's email
+    this.authService.currentUser
+      .pipe(take(1))
+      .subscribe(user => {
+        if (!user?.email) return;
+
+        this.ticketService
+          .getTicketsByEmail(user.email)
+          .pipe(take(1))
+          .subscribe({
+            next: tickets => {
+              this.displayedTickets = tickets;
+            },
+            error: err => {
+              console.error('Failed to load tickets', err);
+            }
+          });
+      });
+  }
+
+  get sortedTickets(): Ticket[] {
+    return [...this.displayedTickets].sort((a, b) => {
+      if (a.booked !== b.booked) {
+        return a.booked ? 1 : -1;
       }
+      return (
+        new Date(b.departureTime).getTime() -
+        new Date(a.departureTime).getTime()
+      );
     });
   }
 
-  ngOnDestroy() {
-    console.log('TicketList component destroyed');
+  openCancelModal(ticket: Ticket): void {
+    this.selectedTicket = ticket;
+  }
+
+  isCancelDisabled(ticket: Ticket): boolean {
+    const hoursLeft =
+      (new Date(ticket.departureTime).getTime() - Date.now()) / (1000 * 60 * 60);
+    return hoursLeft < 24;
+  }
+
+  confirmCancel(): void {
+    if (!this.selectedTicket) return;
+    this.ticketCancelled.emit(this.selectedTicket.id);
+    this.selectedTicket = undefined;
   }
 }

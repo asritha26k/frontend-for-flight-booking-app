@@ -1,9 +1,8 @@
-@if (tickets$ | async; as tickets) {
+@if (displayedTickets.length > 0) {
 
   <div class="row pt-5 g-4">
 
-    @for (ticket of tickets; track ticket.pnr) {
-
+    @for (ticket of sortedTickets; track ticket.pnr) {
       <div class="col-md-6">
         <div class="ticket-card">
 
@@ -44,6 +43,24 @@
             </div>
           </div>
 
+          <div class="ticket-divider"></div>
+
+          <!-- Passengers -->
+          <div class="passengers">
+            <small class="text-muted">Passengers</small>
+
+            @for (p of ticket.passengers; track p.email) {
+              <div class="passenger">
+                <strong>{{ p.name }}</strong>
+                <div class="text-muted small">
+                  {{ p.email }} · {{ p.phoneNum }}
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="ticket-divider"></div>
+
           <!-- Footer -->
           <div class="ticket-footer">
             <span class="seats">
@@ -53,8 +70,6 @@
             @if (ticket.booked && !isCancelDisabled(ticket)) {
               <button
                 class="btn btn-danger btn-sm"
-                data-bs-toggle="modal"
-                data-bs-target="#cancelModal"
                 (click)="openCancelModal(ticket)">
                 Cancel Ticket
               </button>
@@ -66,11 +81,10 @@
 
     }
 
-    @if (tickets.length === 0) {
-      <div class="text-center text-muted mt-5">
-        No tickets found
-      </div>
-    }
+  </div>
 
+} @else {
+  <div class="text-center text-muted mt-5">
+    No tickets found
   </div>
 }

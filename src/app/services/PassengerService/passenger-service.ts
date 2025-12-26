@@ -20,7 +20,13 @@ export class PassengerService {
       { withCredentials: true }
     );
   }
-
+createOrGetPassenger(profile: Profile) {
+    return this.http.post<number>(
+      `${this.BASE_URL}/create-or-get`,
+      profile,
+      { withCredentials: true }
+    );
+  }
   getPassengerByUserId(passengerId: number) {
     console.log(passengerId);
     return this.http.get<Profile>(

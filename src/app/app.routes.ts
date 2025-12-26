@@ -12,6 +12,7 @@ import { PassengerRegistration } from './components/passenger-registration/passe
 import { TicketList } from './components/ticket-list/ticket-list';
 import { FlightAdmin } from './components/flight-admin/flight-admin';
 import {ChangePassword} from './components/change-password/change-password';
+import { PassengerAdd } from './components/passenger-add/passenger-add';
 export const routes: Routes = [
     {path:'',component:Home},
     {path:'signup',component:Signup},
@@ -21,7 +22,8 @@ export const routes: Routes = [
     {path:'register',component:PassengerRegistration,canActivate: [userOrAdminGuard]},
     {path:'tickets',component:TicketList,canActivate:[userOrAdminGuard]},
     {path:'addFlights',component:FlightAdmin,canActivate:[adminGuard]},
-    {path:'change-password',component:ChangePassword}
+    {path:'change-password',component:ChangePassword},
+    {path:'passenger-add',component:PassengerAdd}
 
 
 

@@ -1,16 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
+import { take } from 'rxjs';
 
-import { FlightService } from '../../services/FlightService/flight-service';
 import { Flight } from '../../models/Flight';
-import { searchReq } from '../../models/searchRequest';
 import { AuthService } from '../../services/Authentication/auth-service';
-import { PassengerService } from '../../services/PassengerService/passenger-service';
-import { take, switchMap } from 'rxjs/operators';
-import { searchingStateService } from '../../services/SavingStates/searchingStateService';
-
+import { BookingStateService } from '../../services/BookingState/BookingStateService';
 
 @Component({
   selector: 'app-flight-list',
@@ -21,53 +16,33 @@ import { searchingStateService } from '../../services/SavingStates/searchingStat
 })
 export class FlightList {
 
-  @Input() flights: Flight[] | null = []; //we get this input from the parent component which is home!!
-  //and we display it using our template
+  @Input() flights: Flight[] | null = [];
 
   constructor(
     private readonly router: Router,
     private readonly authService: AuthService,
-    private readonly passengerService: PassengerService,
-    private readonly searchingState: searchingStateService
+    private readonly bookingState: BookingStateService
   ) {}
 
-  SendFlightId(flight: Flight) {
-  console.log('book ticket clicked');
+sendFlightId(flight: Flight) {
   const flightId = flight.flightId;
 
+  if (flightId == null) {
+    console.error('Flight ID missing');
+    return;
+  }
+
   this.authService.currentUser
-    .pipe(
-      take(1), //take the first value and unsubscribes, if not it just listens forever as behaviour subject never completes
-      switchMap(user => {
-        if (!user?.email) {
-          this.router.navigate(['/signin']);
-          throw new Error('User not logged in');
-        }
-
-        // email then passengerId (number)
-        return this.passengerService.getPassengerIdByEmail(user.email);
-      })
-    )
-    .subscribe({
-      next: passengerId => {
-        console.log('Passenger ID found:', passengerId);
-
-        // passenger exists then go to booking page
-        
-        this.router.navigate(['/book'], {
-          queryParams: { flightId } 
-        });
-      },
-      error: err => {
-        // passenger not registered
-        if (err.status === 404) {
-          this.router.navigate(['/register'], {
-          queryParams: { flightId } 
-        });
-        } else {
-          console.error(err);
-        }
+    .pipe(take(1))
+    .subscribe(user => {
+      if (!user) {
+        this.router.navigate(['/signin']);
+        return;
       }
+
+      this.bookingState.setFlightId(flightId); 
+
+      this.router.navigate(['/passenger-add']);
     });
 }
 

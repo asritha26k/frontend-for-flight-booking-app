@@ -9,12 +9,14 @@ import { Ticket } from '../../models/Ticket';
 })
 export class TicketService {
 
+  // Gateway routes the ticket service under /ticket-service/ticket/**
   private baseUrl = 'http://localhost:8765/ticket-service/ticket';
 
   constructor(private http: HttpClient) {}
 
   // Get tickets by email
   getTicketsByEmail(email: string): Observable<Ticket[]> {
+  //  const encodedEmail = encodeURIComponent(email);
     return this.http
       .get<Ticket[]>(`${this.baseUrl}/getTicketsByEmail/${email}`, {
         withCredentials: true,
@@ -31,29 +33,40 @@ export class TicketService {
       })
       .pipe(catchError(this.handleError));
   }
+bookTicket(payload: { flightId: number; passengerIds: number[] }) {
+  return this.http.post(
+    `${this.baseUrl}/book`,
+    payload,
+    {
+      withCredentials: true,
+      responseType: 'text'
+    }
+  );
+}
 
-  // Book ticket
-  bookTicketByPassengerIdandFlightId(
-    flightId: number,
-    passengerId: number,
-    numberOfSeats: number
-  ): Observable<string> {
 
-    const payload = {
-      flightId,
-      passengerId,
-      numberOfSeats,
-    };
+  // // Book ticket
+  // bookTicketByPassengerIdandFlightId(
+  //   flightId: number,
+  //   passengerId: number,
+  //   numberOfSeats: number
+  // ): Observable<string> {
 
-    console.log('Book Ticket Payload:', payload);
+  //   const payload = {
+  //     flightId,
+  //     passengerId,
+  //     numberOfSeats,
+  //   };
 
-    return this.http
-      .post(`${this.baseUrl}/book`, payload, {
-        withCredentials: true,
-        responseType: 'text',
-      })
-      .pipe(catchError(this.handleError));
-  }
+  //   console.log('Book Ticket Payload:', payload);
+
+  //   return this.http
+  //     .post(`${this.baseUrl}/book`, payload, {
+  //       withCredentials: true,
+  //       responseType: 'text',
+  //     })
+  //     .pipe(catchError(this.handleError));
+  // }
 
   private handleError(error: HttpErrorResponse) {
     let message = 'Something went wrong. Please try again later.';

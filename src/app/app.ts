@@ -22,7 +22,9 @@ export class App implements OnInit {
     private readonly authService: AuthService,
     private readonly router: Router
   ) {}
-
+ AddPassenger(){
+   this.router.navigate(['/passenger-add']);
+ }
   get currentUser$() {
     return this.authService.currentUser;
   }
@@ -37,6 +39,7 @@ export class App implements OnInit {
       )
     );
   }
+  
 
   logout() {
     this.authService.signout().subscribe({
