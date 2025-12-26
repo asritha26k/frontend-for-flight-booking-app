@@ -10,6 +10,7 @@ import { AuthService } from '../../services/Authentication/auth-service';
 import { Router } from '@angular/router';
 import { searchingStateService } from '../../services/SavingStates/searchingStateService';
 import { BookingStateService } from '../../services/BookingState/BookingStateService';
+import { SeatMap } from '../../models/SeatMap';
 
 @Component({
   selector: 'app-ticket-booking',
@@ -21,12 +22,17 @@ import { BookingStateService } from '../../services/BookingState/BookingStateSer
 export class TicketBooking implements OnInit {
 
   tickets$!: Observable<Ticket[]>;
-  private refresh$ = new Subject<void>();
+  private readonly refresh$ = new Subject<void>();
 
   ticketBookedMessage$ = new Subject<string>();
 
   flightId!: number;
   passengerIds: number[] = [];
+  seatMap?: SeatMap;
+  bookedSeatSet = new Set<string>();
+  selectedSeats = new Set<string>();
+  loadingSeatMap = false;
+  seatError?: string;
 
   constructor(
     private readonly ticketService: TicketService,
@@ -48,6 +54,8 @@ export class TicketBooking implements OnInit {
     this.flightId = flightId;
     this.passengerIds = passengerIds;
 
+    this.loadSeatMap();
+
   this.tickets$ = this.refresh$.pipe(
   startWith(void 0),
   switchMap(() =>
@@ -66,15 +74,22 @@ export class TicketBooking implements OnInit {
   }
 
   bookTicket() {
+  if (this.selectedSeats.size !== this.passengerIds.length) {
+    this.ticketBookedMessage$.next(`Please select ${this.passengerIds.length} seat(s) before booking.`);
+    return;
+  }
+
   this.ticketService.bookTicket({
     flightId: this.flightId,
-    passengerIds: this.passengerIds
+    passengerIds: this.passengerIds,
+    seatNumbers: Array.from(this.selectedSeats)
   }).subscribe({
     next: (pnr: string) => {
       this.searchingState.clear();
       this.bookingState.reset();
       this.ticketBookedMessage$.next(`Ticket booked successfully. PNR: ${pnr}`);
       this.refresh$.next();
+      this.loadSeatMap();
     },
     error: (err) => {
       this.ticketBookedMessage$.next(err);
@@ -84,5 +99,56 @@ export class TicketBooking implements OnInit {
 
   onTicketCancelled() {
     this.refresh$.next();
+    this.loadSeatMap();
+  }
+
+  loadSeatMap() {
+    this.loadingSeatMap = true;
+    this.seatError = undefined;
+
+    this.ticketService.getSeatMap(this.flightId).subscribe({
+      next: (map) => {
+        this.seatMap = map;
+        this.bookedSeatSet = new Set((map.bookedSeats ?? []).map(s => s.trim().toUpperCase()));
+        this.selectedSeats.clear();
+        this.loadingSeatMap = false;
+      },
+      error: (err) => {
+        this.seatError = err;
+        this.loadingSeatMap = false;
+      }
+    });
+  }
+
+  seatNumbers(): string[] {
+    if (!this.seatMap) return [];
+    return Array.from({ length: this.seatMap.totalSeats }, (_, idx) => (idx + 1).toString());
+  }
+
+  seatStatus(seat: string): 'booked' | 'selected' | 'available' {
+    const normalized = seat.trim().toUpperCase();
+    if (this.bookedSeatSet.has(normalized)) return 'booked';
+    if (this.selectedSeats.has(normalized)) return 'selected';
+    return 'available';
+  }
+
+  toggleSeat(seat: string) {
+    const normalized = seat.trim().toUpperCase();
+
+    if (this.bookedSeatSet.has(normalized) || this.loadingSeatMap) {
+      return;
+    }
+
+    if (this.selectedSeats.has(normalized)) {
+      this.selectedSeats.delete(normalized);
+      return;
+    }
+
+    if (this.selectedSeats.size >= this.passengerIds.length) {
+      this.ticketBookedMessage$.next(`Only ${this.passengerIds.length} seat(s) can be selected for this booking.`);
+      return;
+    }
+
+    this.selectedSeats.add(normalized);
   }
 }

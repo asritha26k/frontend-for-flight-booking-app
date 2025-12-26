@@ -5,6 +5,7 @@ export interface Ticket {
   destination: string;
   departureTime: string;
   arrivalTime: string;
+  seatNumbers?: string[];
   numberOfSeats: number;
   booked: boolean;
   passengers: {

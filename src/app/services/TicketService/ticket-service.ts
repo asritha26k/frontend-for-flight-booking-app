@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map,catchError } from 'rxjs/operators';
 import { Ticket } from '../../models/Ticket';
+import { SeatMap } from '../../models/SeatMap';
 
 @Injectable({
   providedIn: 'root',
@@ -10,9 +11,9 @@ import { Ticket } from '../../models/Ticket';
 export class TicketService {
 
   // Gateway routes the ticket service under /ticket-service/ticket/**
-  private baseUrl = 'http://localhost:8765/ticket-service/ticket';
+  private readonly baseUrl = 'http://localhost:8765/ticket-service/ticket';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   // Get tickets by email
 getTicketsByEmail(email: string): Observable<Ticket[]> {
@@ -35,7 +36,7 @@ getTicketsByEmail(email: string): Observable<Ticket[]> {
       })
       .pipe(catchError(this.handleError));
   }
-bookTicket(payload: { flightId: number; passengerIds: number[] }) {
+bookTicket(payload: { flightId: number; passengerIds: number[]; seatNumbers: string[] }) {
   return this.http.post(
     `${this.baseUrl}/book`,
     payload,
@@ -43,32 +44,15 @@ bookTicket(payload: { flightId: number; passengerIds: number[] }) {
       withCredentials: true,
       responseType: 'text'
     }
-  );
+  ).pipe(catchError(this.handleError));
 }
 
+getSeatMap(flightId: number): Observable<SeatMap> {
+  return this.http.get<SeatMap>(`${this.baseUrl}/seat-map/${flightId}`, {
+    withCredentials: true
+  }).pipe(catchError(this.handleError));
+}
 
-  // // Book ticket
-  // bookTicketByPassengerIdandFlightId(
-  //   flightId: number,
-  //   passengerId: number,
-  //   numberOfSeats: number
-  // ): Observable<string> {
-
-  //   const payload = {
-  //     flightId,
-  //     passengerId,
-  //     numberOfSeats,
-  //   };
-
-  //   console.log('Book Ticket Payload:', payload);
-
-  //   return this.http
-  //     .post(`${this.baseUrl}/book`, payload, {
-  //       withCredentials: true,
-  //       responseType: 'text',
-  //     })
-  //     .pipe(catchError(this.handleError));
-  // }
 
   private handleError(error: HttpErrorResponse) {
     let message = 'Something went wrong. Please try again later.';

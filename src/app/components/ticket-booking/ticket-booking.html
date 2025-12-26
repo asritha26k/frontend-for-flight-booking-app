@@ -1,9 +1,9 @@
-<div class="d-flex justify-content-center align-items-center min-vh-100 flex-column">
+<div class="d-flex justify-content-center align-items-start min-vh-100 flex-column w-100">
 
-  <div class="d-flex justify-content-center my-4 flex-column text-center">
+  <div class="d-flex justify-content-center my-4 flex-column text-center w-100">
 
     @if (ticketBookedMessage$ | async; as msg) {
-      <div class="alert alert-info">
+      <div class="alert alert-info mx-auto w-75">
         {{ msg }}
       </div>
     }
@@ -20,11 +20,75 @@
 
   </div>
 
-  <form class="card p-4" (ngSubmit)="bookTicket()">
-    <button type="submit" class="btn btn-primary">
-      Confirm Booking
-    </button>
-  </form>
+  <div class="card p-4 mx-auto seat-card">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="mb-1">Select your seats</h5>
+        <small class="text-muted">Selected {{ selectedSeats.size }} of {{ passengerIds.length }} seat(s)</small>
+      </div>
+
+      <div class="text-end">
+        @if (seatMap) {
+          <small class="text-success d-block">Available: {{ seatMap.availableSeats }}</small>
+          <small class="text-muted">Total: {{ seatMap.totalSeats }}</small>
+        }
+      </div>
+    </div>
+
+    @if (seatError) {
+      <div class="alert alert-danger">{{ seatError }}</div>
+    }
+
+    @if (loadingSeatMap) {
+      <div class="d-flex justify-content-center my-3" aria-live="polite" aria-busy="true">
+        <div class="spinner-border" aria-hidden="true"></div>
+        <output class="visually-hidden">Loading seats...</output>
+      </div>
+    } @else if (seatMap) {
+
+      <div class="legend mb-3">
+        <span class="legend-item available">Available</span>
+        <span class="legend-item selected">Selected</span>
+        <span class="legend-item booked">Booked</span>
+      </div>
+
+      <div class="seat-grid">
+        @for (seat of seatNumbers(); track seat) {
+          <button
+            type="button"
+            class="seat"
+            [class.booked]="seatStatus(seat) === 'booked'"
+            [class.selected]="seatStatus(seat) === 'selected'"
+            [class.available]="seatStatus(seat) === 'available'"
+            (click)="toggleSeat(seat)"
+            [disabled]="seatStatus(seat) === 'booked' || loadingSeatMap">
+            {{ seat }}
+          </button>
+        }
+      </div>
+
+      <div class="d-flex justify-content-end mt-3">
+        <button
+          type="button"
+          class="btn btn-outline-secondary btn-sm me-2"
+          (click)="loadSeatMap()"
+          [disabled]="loadingSeatMap">
+          Refresh Seats
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="bookTicket()"
+          [disabled]="selectedSeats.size !== passengerIds.length || loadingSeatMap">
+          Confirm Booking
+        </button>
+      </div>
+
+    }
+
+  </div>
 
 </div>
 

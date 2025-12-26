@@ -1,0 +1,66 @@
+.seat-card {
+	max-width: 900px;
+	width: 100%;
+}
+
+.seat-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+	gap: 10px;
+}
+
+.seat {
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	padding: 10px 0;
+	background: #f8f9fa;
+	color: #212529;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.seat.available {
+	background: #d8f3dc;
+	border-color: #2d6a4f;
+	color: #1b4332;
+}
+
+.seat.selected {
+	background: #dbe7ff;
+	border-color: #0b4f9c;
+	color: #0b4f9c;
+	box-shadow: 0 0 0 2px rgba(11, 79, 156, 0.18);
+}
+
+.seat.booked {
+	background: #fde4e1;
+	border-color: #b02a37;
+	color: #842029;
+	cursor: not-allowed;
+}
+
+.seat:disabled {
+	cursor: not-allowed;
+	opacity: 0.8;
+}
+
+.legend {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+}
+
+.legend-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 10px;
+	border-radius: 6px;
+	font-size: 0.9rem;
+	border: 1px solid #e0e0e0;
+}
+
+.legend-item.available { background: #d8f3dc; color: #1b4332; }
+.legend-item.selected { background: #dbe7ff; color: #0b4f9c; }
+.legend-item.booked { background: #fde4e1; color: #842029; }
