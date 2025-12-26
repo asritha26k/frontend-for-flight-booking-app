@@ -67,11 +67,13 @@
               Seats: {{ ticket.numberOfSeats }}
             </span>
 
-            @if (ticket.seatNumbers && ticket.seatNumbers.length) {
-              <span class="text-muted small ms-2">
+            <span class="text-muted small ms-2">
+              @if (ticket.seatNumbers && ticket.seatNumbers.length) {
                 ({{ ticket.seatNumbers.join(', ') }})
-              </span>
-            }
+              } @else {
+                (not assigned)
+              }
+            </span>
 
             @if (ticket.booked && !isCancelDisabled(ticket)) {
               <button
