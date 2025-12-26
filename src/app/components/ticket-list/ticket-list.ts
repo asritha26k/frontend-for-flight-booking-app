@@ -18,7 +18,8 @@ export class TicketList implements  OnInit, OnChanges{
   @Output() ticketCancelled = new EventEmitter<number>();
 
   displayedTickets: Ticket[] = [];
-  private selectedTicket?: Ticket;
+  selectedTicket?: Ticket;
+  isCancelling = false;
 
   constructor(
     private ticketService: TicketService,
@@ -56,18 +57,18 @@ ngOnChanges(changes: SimpleChanges): void {
       });
   }
 
-  get sortedTickets(): Ticket[] {
-    return [...this.displayedTickets].sort((a, b) => {
-      if (a.booked !== b.booked) {
-        return a.booked ? 1 : -1;
-      }
-      return (
-        new Date(b.departureTime).getTime() -
-        new Date(a.departureTime).getTime()
-      );
-    });
-  }
+ get sortedTickets(): Ticket[] {
+  return [...this.displayedTickets].sort((a, b) => {
 
+    if (a.booked !== b.booked) {
+      return a.booked ? -1 : 1;
+    }
+    return (
+      new Date(b.departureTime).getTime() -
+      new Date(a.departureTime).getTime()
+    );
+  });
+}
   openCancelModal(ticket: Ticket): void {
     this.selectedTicket = ticket;
   }
@@ -78,9 +79,24 @@ ngOnChanges(changes: SimpleChanges): void {
     return hoursLeft < 24;
   }
 
-  confirmCancel(): void {
-    if (!this.selectedTicket) return;
-    this.ticketCancelled.emit(this.selectedTicket.id);
+  confirmCancel(ticket: Ticket): void {
+    this.isCancelling = true;
+    this.ticketService.cancelTicket(ticket.id).subscribe({
+      next: () => {
+        // Remove cancelled ticket from display
+        this.displayedTickets = this.displayedTickets.filter(t => t.id !== ticket.id);
+        this.selectedTicket = undefined;
+        this.ticketCancelled.emit(ticket.id);
+        this.isCancelling = false;
+      },
+      error: (err) => {
+        console.error('Failed to cancel ticket:', err);
+        this.isCancelling = false;
+      }
+    });
+  }
+
+  closeModal(): void {
     this.selectedTicket = undefined;
   }
 }

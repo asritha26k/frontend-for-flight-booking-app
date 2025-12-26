@@ -88,3 +88,53 @@
     No tickets found
   </div>
 }
+
+<!-- Cancel Confirmation Modal -->
+@if (selectedTicket) {
+  <div class="modal-backdrop fade show " style="display: block;"></div>
+  <div class="modal fade show my-5" style="display: block;">
+    <div class="modal-dialog my-5">
+      <div class="modal-content ">
+        <div class="modal-header">
+          <h5 class="modal-title">Cancel Ticket</h5>
+          <button 
+            type="button" 
+            class="btn-close" 
+            (click)="closeModal()"
+            [disabled]="isCancelling">
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to cancel this ticket?</p>
+          <div class="alert alert-info">
+            <strong>{{ selectedTicket.origin }} → {{ selectedTicket.destination }}</strong><br>
+            PNR: {{ selectedTicket.pnr }}<br>
+            Departure: {{ selectedTicket.departureTime | date:'dd MMM yyyy, hh:mm a' }}
+          </div>
+          <p class="text-muted">This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+          <button 
+            type="button" 
+            class="btn btn-secondary" 
+            (click)="closeModal()"
+            [disabled]="isCancelling">
+            Keep Ticket
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-danger" 
+            (click)="confirmCancel(selectedTicket)"
+            [disabled]="isCancelling">
+            @if (isCancelling) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              Cancelling...
+            } @else {
+              Confirm Cancellation
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
