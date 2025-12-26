@@ -29,6 +29,6 @@
 </div>
 
 <app-ticket-list
-  [tickets]="tickets$ | async"
+  [tickets]="(tickets$ | async) ?? []"
   (ticketCancelled)="onTicketCancelled()">
 </app-ticket-list>

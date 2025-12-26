@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Observable, Subject, switchMap, take, startWith } from 'rxjs';
-
+import { map } from 'rxjs/operators';
 import { TicketList } from '../ticket-list/ticket-list';
 import { TicketService } from '../../services/TicketService/ticket-service';
 import { Ticket } from '../../models/Ticket';
@@ -48,18 +48,21 @@ export class TicketBooking implements OnInit {
     this.flightId = flightId;
     this.passengerIds = passengerIds;
 
-    this.tickets$ = this.refresh$.pipe(
-      startWith(void 0),
-      switchMap(() =>
-        this.authService.currentUser.pipe(
-          take(1),
-          switchMap(user => {
-            if (!user) throw new Error('User not logged in');
-            return this.ticketService.getTicketsByEmail(user.email);
-          })
-        )
-      )
-    );
+  this.tickets$ = this.refresh$.pipe(
+  startWith(void 0),
+  switchMap(() =>
+    this.authService.currentUser.pipe(
+      take(1),
+      switchMap(user => {
+        if (!user) throw new Error('User not logged in');
+        return this.ticketService.getTicketsByEmail(user.email);
+      })
+    )
+  ),
+  map((tickets: Ticket[] | null) => tickets ?? [])
+);
+
+
   }
 
   bookTicket() {

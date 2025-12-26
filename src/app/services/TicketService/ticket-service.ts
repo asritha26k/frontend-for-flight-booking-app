@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { map,catchError } from 'rxjs/operators';
 import { Ticket } from '../../models/Ticket';
 
 @Injectable({
@@ -15,14 +15,16 @@ export class TicketService {
   constructor(private http: HttpClient) {}
 
   // Get tickets by email
-  getTicketsByEmail(email: string): Observable<Ticket[]> {
-  //  const encodedEmail = encodeURIComponent(email);
-    return this.http
-      .get<Ticket[]>(`${this.baseUrl}/getTicketsByEmail/${email}`, {
-        withCredentials: true,
-      })
-      .pipe(catchError(this.handleError));
-  }
+getTicketsByEmail(email: string): Observable<Ticket[]> {
+  return this.http
+    .get<Ticket[] | null>(`${this.baseUrl}/getTicketsByEmail/${email}`, {
+      withCredentials: true,
+    })
+    .pipe(
+      map((tickets: Ticket[] | null): Ticket[] => tickets ?? []),
+      catchError(this.handleError)
+    );
+}
 
   // Cancel ticket
   cancelTicket(id: number): Observable<string> {
